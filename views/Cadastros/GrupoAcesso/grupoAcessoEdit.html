@@ -1,0 +1,69 @@
+<!--Title-->
+<div class="row" style="padding-bottom:16px; padding-right: 26px; padding-left:26px">
+    <div class="col-sm-6">
+        <div class="header">
+            <h4 class="title" id="mudaTitle"></h4>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="row card-body float-right" style="padding-bottom:16px">
+            <button type="button" onclick="location.href = '#/grupo_acesso';" class="btn ">
+                <span class="btn-label">
+                    <i class="now-ui-icons arrows-1_minimal-left"></i>
+                </span>
+                Retornar
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Main -->
+<div class="wizard-container">
+    <div class="card card-wizard active" data-color="primary" id="wizardProfile">
+        <!-- Nav -->
+        <div class="card-header text-center" style="margin-bottom: -60px">
+            <div class="wizard-navigation">
+                <ul class="nav">
+                    <li class="nav-item" style="width: 50%;cursor: pointer">
+                        <a class="nav-link userTabOnClick">
+                            <i class="fas fa-user"></i> Usuários
+                        </a>
+                    </li>
+                    <li class="nav-item" style="width: 50%;cursor: pointer">
+                        <a class="nav-link telasTabOnClick">
+                            <i class="fas fa-bars"></i> Telas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Body -->
+        <div class="card-body">
+            <div class="tab-content">
+                <!-- Tab 1 -->
+                <div class="tab-pane active TabUsuarios">
+                    <p style="display:inline-block">Usuários</p>
+                    <p style="display:inline-block;margin-left: 44vw;margin-top: 30px">Usuários Permitidos</p>
+                    <form id="userForm" action="#" method="post">
+                        <select multiple="" size="10" name="duallistboxUser" id="nomeUsuario" type="text"
+                            style="display: none;">
+                        </select>
+                       
+                    </form>
+
+                </div>
+                <!-- Tab 2 -->
+                <div class="tab-pane TabTelasSistema">
+                    <p style="display:inline-block">Telas do Sistema</p>
+                    <p style="display:inline-block;margin-left: 41vw;margin-top: 30px">Telas Permitidas</p>
+                    <form id="telasForm" action="#" method="post">
+                        <select multiple="" size="10" name="duallistboxTelas" id="telaSistema" type="text"
+                            style="display: none;">
+                        </select>
+                       
+                    </form>
+                </div>
+                <button type="submit" class="btn btn-success float-right" id="btnSave">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

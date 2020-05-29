@@ -1,0 +1,260 @@
+<div class="content geralPadding pt-4">
+    <!--Title-->
+    <div class="row">
+        <div class="col-sm-6" style="max-height: 93px;">
+            <div class="header">
+                <h4 class="title">Cadastro de Receitas</h4>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row card-body float-right" style="padding-bottom:16px">
+                <button id="btnTurno" class="btn btn-success float-right">Cadastrar</button>
+                <button id="btnExcluir" class="btn btn-danger float-right" style="display: none;">Excluir</button>
+                <button id="btnCancelar" class="btn float-right">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div class="content geralPadding">
+        <div class="row ml-auto mr-auto">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                            <legend style="width: fit-content;padding: 0 5px;">Processo</legend>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-sm-3 mr-3" style="padding: 0;">
+                                            <label class="ml-3">Temp. Mixer Z1</label>
+                                            <div class="form-group ml-3">
+                                                <input id="inputId" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mr-3" style="padding: 0;">
+                                            <label>Temp. Mixer Z2</label>
+                                            <div class="form-group">
+                                                <input id="inputInicio" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" style="padding: 0;">
+                                            <label>Temp. Mixer Z3</label>
+                                            <div class="form-group">
+                                                <input id="inputFim" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label>Notas</label>
+                                    <div class="form-group mr-3">
+                                        <input id="inputFim" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                            <legend style="width: fit-content;padding: 0 5px;">Parametros Matriais</legend>
+                            <div class="row">
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-3">Toler Max.</label>
+                                    <div class="form-group ml-3">
+                                        <input id="inputId" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Toler Min.</label>
+                                    <div class="form-group ml-2">
+                                        <input id="inputInicio" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Vel. Rápida</label>
+                                    <div class="form-group ml-2">
+                                        <input id="inputFim" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Vel. Lenta</label>
+                                    <div class="form-group ml-2 mr-3 pr-2">
+                                        <input id="inputFim" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-3">Vel. Jog</label>
+                                    <div class="form-group ml-3">
+                                        <input id="inputId" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Peso Lento</label>
+                                    <div class="form-group ml-2">
+                                        <input id="inputInicio" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Peso jog</label>
+                                    <div class="form-group ml-2">
+                                        <input id="inputFim" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-2">Tempo Jog</label>
+                                    <div class="form-group ml-2 mr-3 pr-2">
+                                        <input id="inputFim" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 ml-auto mr-auto">
+                <!--Main tabs-->
+                <div class="card-body card">
+                    <table id="datatable_receita"
+                        class="table table-hover table-striped table-bordered text-center context-menu-one"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Receita</th>
+                                <th>Produto</th>
+                                <th>Banbury</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CTDTB0011</td>
+                                <td>CTDTB0011</td>
+                                <td>BY02</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body card">
+                    <table id="datatable_mp"
+                        class="table table-hover table-striped table-bordered text-center context-menu-one"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>M.P.</th>
+                                <th>Peso Plan.</th>
+                                <th>Tol. Max.</th>
+                                <th>Tol. Min.</th>
+                                <th>Vel. Rápida</th>
+                                <th>Vel. Lenta</th>
+                                <th>Vel. Jog.</th>
+                                <th>Pes. Lento</th>
+                                <th>Pes. Jog.</th>
+                                <th>T. Jog.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>N0005</td>
+                                <td>105.142</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>S0122</td>
+                                <td>22.303</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Z0502</td>
+                                <td>7.264</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>B0208</td>
+                                <td>80.290</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body card">
+                    <table id="datatable_op"
+                        class="table table-hover table-striped table-bordered text-center context-menu-one"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Seq.</th>
+                                <th>Operação</th>
+                                <th>Tempo</th>
+                                <th>Energia</th>
+                                <th>Temperatura</th>
+                                <th>RPM</th>
+                                <th>Pressão pistão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Início de Ciclo</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>45</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Carregar 2</td>
+                                <td>70s</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Abaixar Pistão/Porta Fechada 1</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>6.5KGF/CM²</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+<div class="content geralPadding pt-4">
+    <!--Title-->
+    <div class="row">
+        <div class="col-sm-6" style="max-height: 93px;">
+            <div class="header">
+                <h4 class="title">Cadastro de Exceção no Turno</h4>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row card-body float-right" style="padding-bottom:16px">
+                <button id="btnExcecao" class="btn btn-success float-right">Cadastrar</button>
+                <button id="btnExcluir" class="btn btn-danger float-right" style="display: none;">Excluir</button>
+                <button id="btnCancelar" class="btn float-right">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div class="content geralPadding">
+        <div class="row ml-auto mr-auto">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="col-sm-4 pl-0">
+                            <div class="form-group">
+                                <label>Data</label>
+                                <input id="inputData" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                            <legend style="width: fit-content;padding: 0 5px;">Exceção</legend>
+                            <div class="form-check mb-3" style="display: inline-block;">
+                                <label class="form-check-label">
+                                    <input id="radioFolga" class="form-check-input" type="checkbox">
+                                    <span class="form-check-sign"></span>
+                                    Folga
+                                </label>
+                            </div>
+                            <div class="form-check mb-3" style="display: inline-block;">
+                                <label class="form-check-label">
+                                    <input id="radioNPadrao" class="form-check-input" type="checkbox">
+                                    <span class="form-check-sign"></span>
+                                    Trabalho não padrão
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Turno</label>
+                            <input id="inputTurno" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Início</label>
+                            <input id="inputI" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Fim</label>
+                            <input id="inputF" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Motivo</label>
+                            <input id="inputM" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 ml-auto mr-auto">
+                <!--Main tabs-->
+                <div class="card-body card">
+                    <!--Tab Content-->
+                    <div class="tab-content">
+                        <table id="datatable_excecao"
+                            class="table table-hover table-striped table-bordered text-center context-menu-one"
+                            cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Turno</th>
+                                    <th>Início Exceção</th>
+                                    <th>Fim Exceção</th>
+                                    <th>Motivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Turno</th>
+                                    <th>Início Exceção</th>
+                                    <th>Fim Exceção</th>
+                                    <th>Motivo</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
