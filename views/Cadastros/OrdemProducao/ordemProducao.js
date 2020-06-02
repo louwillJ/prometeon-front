@@ -1,10 +1,17 @@
 app.controller('ordemProducao', ['$scope', function ($scope) {
     var table = '';
+    var _idOP = '';
 
     $(function () {
         $('#Cadastros').addClass('show');
 
-        table = $('#datatable_usuarios').DataTable({
+        table = $('#datatable_ordemProducao').DataTable({
+            ajax: {
+                url: Url.ordemProducao.def,
+                method: 'GET',
+                dataSrc: '',
+                crossDomain: true
+            },     
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -40,7 +47,7 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                 "<'row'<'col-sm-12 'B>>",
             buttons: [{
                     extend: 'excelHtml5',
-                    title: 'Usuários' + moment().format("DD.MM.YY"),
+                    title: 'Ordem de Produção' + moment().format("DD.MM.YY"),
                     text: '<i title="Exportar para Excel" class="far fa-file-excel"></i>',
                     className: 'btn-export',
                     // exportOptions: {
@@ -49,7 +56,7 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                 },
                 {
                     extend: 'pdfHtml5',
-                    title: 'Usuários' + moment().format("DD.MM.YY"),
+                    title: 'Ordem de Produção' + moment().format("DD.MM.YY"),
                     text: '<i title="Exportar para PDF" class="far fa-file-pdf"></i>',
                     className: 'btn-export',
                     // exportOptions: {
@@ -57,36 +64,67 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                     // }
                 },
             ],
-            responsive: true
+            responsive: true,
+            columns: [{
+                data: 'orD_ID'
+            },    
+            {
+                data: 'orG_ID'
+            }, 
+            {
+                data: 'boM_ID'
+            },   
+            {
+                data: 'orD_QUANTITY'
+            },
+            {
+                data: 'orD_DATE_CREATION'
+            },              
+            {
+                data: 'orD_DATE_PLANNED'
+            },
+            {
+                data: 'stA_ID'
+            },            
+        ],
         });
 
     });
 
-    $('#datatable_usuarios tbody').on('click', 'tr', function () {
+    $('#datatable_ordemProducao tbody').on('click', 'tr', function () {
         var data = table.row(this).data();
-        $("#inputUser").val(data[0]);
-        $("#inputNome").val(data[1]);
-        $("#inputQtd").val(data[2]);
-        $("#inputSenha").val(data[3]);
+
+        _idOP = data.orD_ID;
+       // $("#inputOP").val(data.ORD_ID);
+        $("#inputCentro").val(data.orG_ID);
+        $("#inputReceita").val(data.boM_ID);
+        $("#inputQtd").val(data.orD_QUANTITY);
+        $("#inputDtPrevista").val(data.orD_DATE_PLANNED);
+        $("#inputStatus").val(data.stA_ID);
+        $("#inputDtCriacao").val(data.orD_DATE_CREATION);
 
         $("#btnExcluir").css("display", "block");
-        $("#btnUsuario").removeClass("btn-success").addClass("btn-warning").text("Editar");
+        $("#btnOP").removeClass("btn-success").addClass("btn-warning").text("Editar");
     });
 
     $("#btnCancelar").click(function () {
-        $("#btnUsuario").removeClass("btn-warning").addClass("btn-success").text("Cadastrar");
+        $("#btnOP").removeClass("btn-warning").addClass("btn-success").text("Cadastrar");
         $("#btnExcluir").css("display", "none");
 
-        $("#inputUser").val("");
-        $("#inputNome").val("");
+        $("#inputOP").val("");
+        $("#inputCentro").val("");
+        $("#inputReceita").val("");
         $("#inputQtd").val("");
-        $("#inputSenha").val("");
+        $("#inputDtPrevista").val("");
+        $("#inputStatus").val("");
+        $("#inputDtCriacao").val("");
+
     });
 
-    $("#btnUsuario").click(function () {
-        if ($("#btnUsuario").hasClass("btn-success")) {
+    $("#btnOP").click(function () {
+        if ($("#btnOP").hasClass("btn-success")) {
             Swal.fire({
-                title: `Cadastrar Usuário?`,
+                title: `Cadastrar Ordem de Produção?`,
                 // text: `Esta operação não poderá ser desfeita!`,
                 type: 'warning',
                 showCancelButton: true,
@@ -96,21 +134,53 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    Swal.fire({
-                        title: 'Usuário cadastrado!',
-                        type: 'success',
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(function () {
-                        $("#btnCancelar").click();
+                    var data = {                                             
+                        orD_DATE_CREATION: $("#inputDtPrevista").val(),// $("#inputDtCriacao").val(),
+                        orD_QUANTITY: parseInt($("#inputQtd").val()),
+                        stA_ID: parseInt($("#inputStatus").val()),
+                        orG_ID: parseInt($("#inputCentro").val()),
+                        orD_DATE_PLANNED: $("#inputDtPrevista").val(),
+                        boM_ID: parseInt($("#inputReceita").val()),
+                        orD_ACTIVE: true                    
+                    };
+                    $.ajax({
+                        url: Url.ordemProducao.def,
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: 'Ordem de Produção cadastrada!',
+                                type: 'success',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                $("#btnCancelar").click();
+                                table.ajax.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: 'Refaça a operação',
+                                type: 'error',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                // $("#btnCancelar").click();
+                            });
+                        }
                     });
+                    
                 } else {
-                    $("#btnCancelar").click();
+                   // $("#btnCancelar").click();
                 };
             });
-        } else if ($("#btnUsuario").hasClass("btn-warning")) {
+        } else if ($("#btnOP").hasClass("btn-warning")) {
             Swal.fire({
-                title: `Editar Usuário?`,
+                title: `Editar Ordem de Produção?`,
                 text: `Esta operação não poderá ser desfeita!`,
                 type: 'warning',
                 showCancelButton: true,
@@ -120,16 +190,48 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    Swal.fire({
-                        title: 'Usuário editado!',
-                        type: 'success',
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(function () {
-                        $("#btnCancelar").click();
+                    var data = {
+                        orD_ID: _idOP,
+                        orD_DATE_CREATION: $("#inputDtPrevista").val(),// $("#inputDtCriacao").val(),
+                        orD_QUANTITY: parseInt($("#inputQtd").val()),
+                        stA_ID: parseInt($("#inputStatus").val()),
+                        orG_ID: parseInt($("#inputCentro").val()),
+                        orD_DATE_PLANNED: $("#inputDtPrevista").val(),
+                        boM_ID: parseInt($("#inputReceita").val()),
+                        orD_ACTIVE: true 
+                    };
+                    $.ajax({
+                        url: Url.ordemProducao.def + `/${_idOP}`,
+                        type: 'PUT',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: 'Ordem de Produção Editada!',
+                                type: 'success',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                $("#btnCancelar").click();
+                                table.ajax.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: 'Refaça operação',
+                                type: 'error',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                // $("#btnCancelar").click();
+                            });
+                        }
                     });
                 } else {
-                    $("#btnCancelar").click();
+                   // $("#btnCancelar").click();
                 };
             });
         };
@@ -137,7 +239,7 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
 
     $("#btnExcluir").click(function () {
         Swal.fire({
-            title: `Excluir Usuário?`,
+            title: `Excluir Ordem de Produção?`,
             text: `Esta operação não poderá ser desfeita!`,
             type: 'warning',
             showCancelButton: true,
@@ -147,13 +249,31 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
-                    title: 'Usuário excluido!',
-                    type: 'success',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(function () {
-                    $("#btnCancelar").click();
+                $.ajax({
+                    url: Url.ordemProducao.def + `/${_idOP}`,
+                    type: 'DELETE',
+                    processData: false,
+                    success: function () {
+                        Swal.fire({
+                            title: 'Ordem de Produção Excluída!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                             table.ajax.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            // $("#btnCancelar").click();
+                        });
+                    }
                 });
             } else {
                 $("#btnCancelar").click();
@@ -161,3 +281,42 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
         });
     });
 }]);
+
+
+
+function getStatusOrdem(){
+    var status;
+
+    $.getJSON("http://localhost:5000/api/op_status" , function (data) {
+        $.each(data, function (key, val) {
+            status += "<option value='" + val.stA_ID+ "'>" + val.stA_NOME+ "</option>";  
+            console.log(val.stA_NOME);  
+        });
+
+        var header = '<option value=\'\'>Select...</option>';
+        $('#inputStatus').html(header + status);
+    });
+
+}
+
+/*
+function getReceita(){
+    var status;
+
+    $.getJSON("http://localhost:5000/api/receita" , function (data) {
+        $.each(data, function (key, val) {
+            status += "<option value='" + val.stA_ID+ "'>" + val.stA_NOME+ "</option>";  
+            console.log(val.stA_NOME);  
+        });
+
+        var header = '<option value=\'\'>Select...</option>';
+        $('#inputStatus').html(header + status);
+    });
+
+}*/
+
+$(function () {
+
+    getStatusOrdem();
+
+});

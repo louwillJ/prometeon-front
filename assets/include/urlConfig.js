@@ -9,5 +9,11 @@ var Url = {
     'turnos': {
       'def': `${ambiente}/api/turnos`,
       'excecao':`${ambiente}/api/turno/excecoes`
+    },
+    'ordemProducao': {
+      'def': `${ambiente}/api/op`,
+    },
+    'ordemStatus': {
+      'def': `${ambiente}/api/op_status`,
     }
   };
