@@ -98,7 +98,6 @@ app.controller('turno', ['$scope', function ($scope) {
 
     $('#datatable_turnos tbody').on('click', 'tr', function () {
         var data = _table.row(this).data();
-        console.log(_idTurno);
 
         _idTurno = data.tuR_ID;
         $("#inputId").val(data.tuR_NAME);

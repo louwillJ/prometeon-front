@@ -22,7 +22,7 @@
                         <div class="col-sm-4 pl-0">
                             <div class="form-group">
                                 <label>Data</label>
-                                <input id="inputData" type="text" class="form-control">
+                                <input id="inputData" onclick="datepicker(this)" type="text" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -50,19 +50,22 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Turno</label>
-                            <input id="inputTurno" type="text" class="form-control">
+                            <!-- <input id="inputTurno" type="text" class="form-control"> -->
+                            <select type="text" class="form-control" id="inputTurno">
+                                <option selected value="">Selecione</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Início</label>
-                            <input id="inputI" type="text" class="form-control">
+                            <input id="inputI" onclick="timepicker(this)" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Fim</label>
-                            <input id="inputF" type="text" class="form-control">
+                            <input id="inputF" onclick="timepicker(this)" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="col-sm-6">

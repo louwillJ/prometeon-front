@@ -1,11 +1,17 @@
 app.controller('excecaoTurno', ['$scope', function ($scope) {
-    var table = '';
+    var _table = '';
+    var _idExcecao = '';
 
     $(function () {
         $('#Cadastros').addClass('show');
 
-        table = $('#datatable_excecao').DataTable({
-            "jQueryUI": true,
+        _table = $('#datatable_excecao').DataTable({
+            ajax: {
+                url: Url.turnos.excecao,
+                method: 'GET',
+                dataSrc: '',
+                crossDomain: true
+            },
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -58,17 +64,63 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                     // }
                 },
             ],
-            responsive: true
+            responsive: true,
+            columns: [{
+                    data: 'tuR_ID'
+                },
+                {
+                    data: 'exC_BEGIN'
+                },
+                {
+                    data: 'exC_END'
+                },
+                {
+                    data: 'exC_REASON'
+                }
+            ],
+            // "columnDefs": [{
+            //     "targets": 0,
+            //     render: function (data, type, row) {
+            //         console.log(getTurName(data));
+            //         return getTurName(data);
+
+            //     }
+            // }],
+            //     public long EXC_ID {get; set;}
+            // public int EXC_REST {get; set;}
+            // public int EXC_NOT_STANDARD {get; set;}
+            // public string EXC_BEGIN {get; set;}
+            // public string EXC_END {get; set;}
+            // public string EXC_REASON {get; set;}
+            // public long TUR_ID {get; set;}
         });
+
+        $.ajax({
+            url: Url.turnos.def,
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).done(function (data) {
+            data = data == undefined ? [] : data;
+            data.map(function (element, index) {
+                $("#inputTurno").append(`<option value=${element.tuR_ID}>${element.tuR_NAME}</option>`);
+            });
+        });;
     });
 
     $('#datatable_excecao tbody').on('click', 'tr', function () {
-        var data = table.row(this).data();
-        $("#inputData").val(moment().format("DD/MM/YYYY"));
-        $("#inputTurno").val(data[0]);
-        $("#inputI").val(data[1]);
-        $("#inputF").val(data[2]);
-        $("#inputM").val(data[3]);
+        var data = _table.row(this).data();
+        console.log(data);
+
+        _idExcecao = data.exC_ID;
+        $("#inputData").val(data.exC_BEGIN.substr(0, 10));
+        $("#inputTurno").val(data.tuR_ID);
+        $("#inputI").val(data.exC_BEGIN.substr(11, 6));
+        $("#inputF").val(data.exC_END.substr(11, 6));
+        $("#inputM").val(data.exC_REASON);
+        $("#radioFolga").prop("checked", data.exC_REST);
+        $("#radioNPadrao").prop("checked", data.exC_NOT_STANDARD);
 
         $("#btnExcluir").css("display", "block");
         $("#btnExcecao").removeClass("btn-success").addClass("btn-warning").text("Editar");
@@ -83,6 +135,8 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
         $("#inputI").val("");
         $("#inputF").val("");
         $("#inputM").val("");
+        $("#radioFolga").prop("checked", false);
+        $("#radioNPadrao").prop("checked", false);
     });
 
     $("#btnExcecao").click(function () {
@@ -90,7 +144,7 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             Swal.fire({
                 title: `Cadastrar Exceção no Turno?`,
                 // text: `Esta operação não poderá ser desfeita!`,
-                type: 'warning',
+                type: 'question',
                 showCancelButton: true,
                 reverseButtons: true,
                 allowOutsideClick: false,
@@ -98,16 +152,47 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    Swal.fire({
-                        title: 'Exceção cadastrado!',
-                        type: 'success',
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(function () {
-                        $("#btnCancelar").click();
+                    var data = {
+                        exC_REST: $("#radioFolga").prop("checked") ? 1 : 0,
+                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? 1 : 0,
+                        exC_BEGIN: $("#inputData").val() + " " + $("#inputI").val(),
+                        exC_END: $("#inputData").val() + " " + $("#inputF").val(),
+                        exC_REASON: $("#inputM").val(),
+                        tuR_ID: parseInt($("#inputTurno").val()),
+                    };
+
+                    $.ajax({
+                        url: Url.turnos.excecao,
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: 'Turno cadastrado!',
+                                type: 'success',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                $("#btnCancelar").click();
+                                _table.ajax.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: 'Refaça operação',
+                                type: 'error',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                // $("#btnCancelar").click();
+                            });
+                        }
                     });
                 } else {
-                    $("#btnCancelar").click();
+                    // $("#btnCancelar").click();
                 };
             });
         } else if ($("#btnExcecao").hasClass("btn-warning")) {
@@ -122,16 +207,49 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    Swal.fire({
-                        title: 'Exceção editado!',
-                        type: 'success',
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(function () {
-                        $("#btnCancelar").click();
+                    var data = {
+                        exC_ID: _idExcecao,
+                        exC_REST: $("#radioFolga").prop("checked") ? 1 : 0,
+                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? 1 : 0,
+                        exC_BEGIN: $("#inputData").val() + " " + $("#inputI").val(),
+                        exC_END: $("#inputData").val() + " " + $("#inputF").val(),
+                        exC_REASON: $("#inputM").val(),
+                        tuR_ID: parseInt($("#inputTurno").val()),
+                    };
+                    console.log(data);
+
+                    $.ajax({
+                        url: Url.turnos.excecao + `/${_idExcecao}`,
+                        type: 'PUT',
+                        data: JSON.stringify(data),
+                        processData: false,
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        success: function () {
+                            Swal.fire({
+                                title: 'Exceção Editada!',
+                                type: 'success',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                $("#btnCancelar").click();
+                                _table.ajax.reload();
+                            });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: 'Refaça operação',
+                                type: 'error',
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(function () {
+                                // $("#btnCancelar").click();
+                            });
+                        }
                     });
                 } else {
-                    $("#btnCancelar").click();
+                    // $("#btnCancelar").click();
                 };
             });
         };
@@ -149,16 +267,34 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                Swal.fire({
-                    title: 'Exceção excluido!',
-                    type: 'success',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(function () {
-                    $("#btnCancelar").click();
+                $.ajax({
+                    url: Url.turnos.excecao + `/${_idExcecao}`,
+                    type: 'DELETE',
+                    processData: false,
+                    success: function () {
+                        Swal.fire({
+                            title: 'Exceção Excluída!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            _table.ajax.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            // $("#btnCancelar").click();
+                        });
+                    }
                 });
             } else {
-                $("#btnCancelar").click();
+                // $("#btnCancelar").click();
             };
         });
     });
