@@ -72,7 +72,7 @@ app.controller('usuario', ['$scope', function ($scope) {
                     data: 'usR_EMAIL'
                 },
                 {
-                    data: 'usR_ACCESS_LEVEL'
+                    data: 'userAccessLevel.leV_NAME'
                 }
             ],
             // "columnDefs": [{
@@ -84,6 +84,18 @@ app.controller('usuario', ['$scope', function ($scope) {
             // ],
         });
 
+        $.ajax({
+            url: Url.usuarios.acesso,
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).done(function (data) {
+            data = data == undefined ? [] : data;
+            data.map(function (element, index) {
+                $("#inputAcesso").append(`<option value=${element.leV_ID}>${element.leV_NAME}</option>`);
+            });
+        });;
     });
 
     $('#datatable_usuarios tbody').on('click', 'tr', function () {
@@ -128,12 +140,6 @@ app.controller('usuario', ['$scope', function ($scope) {
                         USR_ACCESS_LEVEL: parseInt($("#inputAcesso").val()),
                         usR_ACTIVE: true
                     };
-                    // var data = {
-                    //     user: $("#inputUser").val(),
-                    //     nome: $("#inputNome").val(),
-                    //     senha: $("#inputSenha").val(),
-                    //     acesso: $("#inputAcesso").val()
-                    // };
 
                     $.ajax({
                         url: Url.usuarios.def,

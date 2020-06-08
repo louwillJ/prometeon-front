@@ -86,13 +86,12 @@ app.controller('turno', ['$scope', function ($scope) {
                     data: 'tuR_VALIDATE_END'
                 }
             ],
-            // "columnDefs": [{
-            //         "targets": 0,
-            //         render: function (data, type, row) {
-            //             return moment(row.dtInicio).format('DD/MM/YYYY HH:mm');
-            //         }
-            //     }
-            // ],
+            "columnDefs": [{
+                "targets": [5, 6],
+                render: function (data, type, row) {
+                    return moment(data, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss');
+                }
+            }],
         });
     });
 
@@ -105,8 +104,8 @@ app.controller('turno', ['$scope', function ($scope) {
         $("#inputFim").val(data.tuR_END.substr(0, 5));
         $("#inputRefI").val(data.tuR_INTERVAL_BEGIN.substr(0, 5));
         $("#inputRefF").val(data.tuR_INTERVAL_END.substr(0, 5));
-        $("#inputValI").val(data.tuR_VALIDATE_BEGIN.substr(0, 10));
-        $("#inputValF").val(data.tuR_VALIDATE_END.substr(0, 10));
+        $("#inputValI").val(moment(data.tuR_VALIDATE_BEGIN.substr(0, 10), "YYYY-MM-DD").format("DD/MM/YYYY"));
+        $("#inputValF").val(moment(data.tuR_VALIDATE_END.substr(0, 10), "YYYY-MM-DD").format("DD/MM/YYYY"));
 
         $("#btnExcluir").css("display", "block");
         $("#btnTurno").removeClass("btn-success").addClass("btn-warning").text("Editar");
@@ -144,9 +143,9 @@ app.controller('turno', ['$scope', function ($scope) {
                         tuR_END: $("#inputFim").val() + ":00",
                         tuR_INTERVAL_BEGIN: $("#inputRefI").val() + ":00",
                         tuR_INTERVAL_END: $("#inputRefF").val() + ":00",
-                        tuR_VALIDATE_BEGIN: `${$("#inputValI").val()} ${$("#inputInicio").val()}:00`,
-                        tuR_VALIDATE_END: `${$("#inputValF").val()} ${$("#inputFim").val()}:00`,
-                        tuR_ACTIVE: 1
+                        tuR_VALIDATE_BEGIN: `${moment($("#inputValI").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputInicio").val()}:00`,
+                        tuR_VALIDATE_END: `${moment($("#inputValF").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputFim").val()}:00`,
+                        tuR_ACTIVE: true
                     };
 
                     $.ajax({
@@ -202,9 +201,9 @@ app.controller('turno', ['$scope', function ($scope) {
                         tuR_END: $("#inputFim").val() + ":00",
                         tuR_INTERVAL_BEGIN: $("#inputRefI").val() + ":00",
                         tuR_INTERVAL_END: $("#inputRefF").val() + ":00",
-                        tuR_VALIDATE_BEGIN: `${$("#inputValI").val()} ${$("#inputInicio").val()}:00`,
-                        tuR_VALIDATE_END: `${$("#inputValF").val()} ${$("#inputFim").val()}:00`,
-                        tuR_ACTIVE: 1
+                        tuR_VALIDATE_BEGIN: `${moment($("#inputValI").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputInicio").val()}:00`,
+                        tuR_VALIDATE_END: `${moment($("#inputValF").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputFim").val()}:00`,
+                        tuR_ACTIVE: true
                     };
 
                     $.ajax({

@@ -66,7 +66,7 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             ],
             responsive: true,
             columns: [{
-                    data: 'tuR_ID'
+                    data: 'turno.tuR_NAME'
                 },
                 {
                     data: 'exC_BEGIN'
@@ -78,21 +78,12 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                     data: 'exC_REASON'
                 }
             ],
-            // "columnDefs": [{
-            //     "targets": 0,
-            //     render: function (data, type, row) {
-            //         console.log(getTurName(data));
-            //         return getTurName(data);
-
-            //     }
-            // }],
-            //     public long EXC_ID {get; set;}
-            // public int EXC_REST {get; set;}
-            // public int EXC_NOT_STANDARD {get; set;}
-            // public string EXC_BEGIN {get; set;}
-            // public string EXC_END {get; set;}
-            // public string EXC_REASON {get; set;}
-            // public long TUR_ID {get; set;}
+            "columnDefs": [{
+                "targets": [1, 2],
+                render: function (data, type, row) {
+                    return moment(data, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss');
+                }
+            }],
         });
 
         $.ajax({
@@ -107,17 +98,17 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                 $("#inputTurno").append(`<option value=${element.tuR_ID}>${element.tuR_NAME}</option>`);
             });
         });;
+
     });
 
     $('#datatable_excecao tbody').on('click', 'tr', function () {
         var data = _table.row(this).data();
-        console.log(data);
 
         _idExcecao = data.exC_ID;
-        $("#inputData").val(data.exC_BEGIN.substr(0, 10));
+        $("#inputData").val(moment(data.exC_BEGIN.substr(0, 10), "YYYY-MM-DD").format("DD/MM/YYYY"));
         $("#inputTurno").val(data.tuR_ID);
-        $("#inputI").val(data.exC_BEGIN.substr(11, 6));
-        $("#inputF").val(data.exC_END.substr(11, 6));
+        $("#inputI").val(data.exC_BEGIN.substr(11, 5));
+        $("#inputF").val(data.exC_END.substr(11, 5));
         $("#inputM").val(data.exC_REASON);
         $("#radioFolga").prop("checked", data.exC_REST);
         $("#radioNPadrao").prop("checked", data.exC_NOT_STANDARD);
@@ -153,12 +144,12 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             }).then((result) => {
                 if (result.value) {
                     var data = {
-                        exC_REST: $("#radioFolga").prop("checked") ? 1 : 0,
-                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? 1 : 0,
-                        exC_BEGIN: $("#inputData").val() + " " + $("#inputI").val(),
-                        exC_END: $("#inputData").val() + " " + $("#inputF").val(),
+                        exC_REST: $("#radioFolga").prop("checked") ? true : false,
+                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? true : false,
+                        exC_BEGIN: `${moment($("#inputData").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputI").val()}:00`,
+                        exC_END: `${moment($("#inputData").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputF").val()}:00`,
                         exC_REASON: $("#inputM").val(),
-                        tuR_ID: parseInt($("#inputTurno").val()),
+                        tuR_ID: parseInt($("#inputTurno").val())
                     };
 
                     $.ajax({
@@ -209,14 +200,13 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                 if (result.value) {
                     var data = {
                         exC_ID: _idExcecao,
-                        exC_REST: $("#radioFolga").prop("checked") ? 1 : 0,
-                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? 1 : 0,
-                        exC_BEGIN: $("#inputData").val() + " " + $("#inputI").val(),
-                        exC_END: $("#inputData").val() + " " + $("#inputF").val(),
+                        exC_REST: $("#radioFolga").prop("checked") ? true : false,
+                        exC_NOT_STANDARD: $("#radioNPadrao").prop("checked") ? true : false,
+                        exC_BEGIN: `${moment($("#inputData").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputI").val()}:00`,
+                        exC_END: `${moment($("#inputData").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputF").val()}:00`,
                         exC_REASON: $("#inputM").val(),
-                        tuR_ID: parseInt($("#inputTurno").val()),
+                        tuR_ID: parseInt($("#inputTurno").val())
                     };
-                    console.log(data);
 
                     $.ajax({
                         url: Url.turnos.excecao + `/${_idExcecao}`,

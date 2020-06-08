@@ -18,32 +18,54 @@
         <div class="row ml-auto mr-auto">
             <div class="card card-body">
                 <div class="row">
-                    <div class="col-md-3">
-                        <label>Site</label>
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <input id="inputSite" type="text" class="form-control">
+                            <label>Nível</label>
+                            <select type="text" class="form-control" id="inputNivel">
+                                <option selected value="">Selecione</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <label>Area</label>
+                    <div class="col-md-2" id="divSite" style="display: none;">
                         <div class="form-group">
-                            <input id="inputArea" type="text" class="form-control">
+                            <label>Site</label>
+                            <select type="text" class="form-control" id="inputSite">
+                                <option selected value="">Selecione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2" id="divArea" style="display: none;">
+                        <div class="form-group">
+                            <label>Area</label>
+                            <select type="text" class="form-control" id="inputArea">
+                                <option selected value="">Selecione</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <label>Linha</label>
+                    <div class="col-md-2" id="divLinha" style="display: none;">
                         <div class="form-group">
-                            <input id="inputLinha" type="text" class="form-control">
+                            <label>Linha</label>
+                            <select type="text" class="form-control" id="inputLinha">
+                                <option selected value="">Selecione</option>
+                            </select>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <label>Equipamento</label>
+                    <div class="col-md-2">
+                        <label>Descriçao</label>
                         <div class="form-group">
-                            <input id="inputEquipamento" type="text" class="form-control">
+                            <input id="inputDescript" type="text" class="form-control">
                         </div>
+                    </div>
+
+                    <div class="form-check mt-4 pt-2" style="display: inline-block;">
+                        <label class="form-check-label">
+                            <input id="checkAtivo" class="form-check-input" type="checkbox">
+                            <span class="form-check-sign"></span>
+                            Ativo
+                        </label>
                     </div>
 
                 </div>
@@ -55,53 +77,22 @@
                 <div class="card-body card">
                     <!--Tab Content-->
                     <div class="tab-content">
-                        <table id="datatable_plantModel" class="table table-hover table-striped table-bordered text-center"
-                            cellspacing="0" width="100%">
+                        <table id="datatable_plantModel"
+                            class="table table-hover table-striped table-bordered text-center" cellspacing="0"
+                            width="100%">
                             <thead>
                                 <tr>
-                                    <th>Site</th>
-                                    <th>Area</th>
-                                    <th>Linha</th>
-                                    <th>Equipamento</th>
+                                    <th>Nível</th>
+                                    <th>Descriçao</th>
+                                    <th>Ativo</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
                             <tfoot>
                                 <tr>
-                                    <th>Site</th>
-                                    <th>Area</th>
-                                    <th>Linha</th>
-                                    <th>Equipamento</th>
+                                    <th>Nível</th>
+                                    <th>Descriçao</th>
+                                    <th>Ativo</th>
                                 </tr>
                             </tfoot>
                         </table>
