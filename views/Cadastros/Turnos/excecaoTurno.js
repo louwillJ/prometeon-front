@@ -1,17 +1,10 @@
-app.controller('excecaoTurno', ['$scope', function ($scope) {
-    var _table = '';
+app.controller('excecaoTurno', ['$scope', '$route', '$http', function ($scope, $route, $http) {
     var _idExcecao = '';
 
-    $(function () {
+    $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
-        _table = $('#datatable_excecao').DataTable({
-            ajax: {
-                url: Url.turnos.excecao,
-                method: 'GET',
-                dataSrc: '',
-                crossDomain: true
-            },
+        $scope.table = $('#datatable_excecao').DataTable({
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -86,23 +79,32 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             }],
         });
 
-        $.ajax({
+        $http({
             url: Url.turnos.def,
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).done(function (data) {
-            data = data == undefined ? [] : data;
-            data.map(function (element, index) {
+            method: "GET"
+        }).then(function successCallback(response) {
+            response.data = response.data == undefined ? [] : response.data;
+            response.data.map(function (element, index) {
                 $("#inputTurno").append(`<option value=${element.tuR_ID}>${element.tuR_NAME}</option>`);
             });
-        });;
+        }, function errorCallback(rejection) {
+            console.log(rejection);
+        });
 
-    });
+        $scope.getExcecoes();
+    }); //FIM SCOPE
+
+    $scope.getExcecoes = () => {
+        $http.get(Url.turnos.excecao).then(function successCallback(response) {
+            $scope.table.clear().draw();
+            $scope.table.rows.add(response.data).draw();
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+    };
 
     $('#datatable_excecao tbody').on('click', 'tr', function () {
-        var data = _table.row(this).data();
+        var data = $scope.table.row(this).data();
 
         _idExcecao = data.exC_ID;
         $("#inputData").val(moment(data.exC_BEGIN.substr(0, 10), "YYYY-MM-DD").format("DD/MM/YYYY"));
@@ -152,35 +154,28 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                         tuR_ID: parseInt($("#inputTurno").val())
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.turnos.excecao,
-                        type: 'POST',
+                        method: 'POST',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Turno cadastrado!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: 'Exceção Cadastrada!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -208,35 +203,28 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
                         tuR_ID: parseInt($("#inputTurno").val())
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.turnos.excecao + `/${_idExcecao}`,
-                        type: 'PUT',
+                        method: 'PUT',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Exceção Editada!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: 'Exceção Editada!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -257,31 +245,29 @@ app.controller('excecaoTurno', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                $.ajax({
+                $http({
                     url: Url.turnos.excecao + `/${_idExcecao}`,
-                    type: 'DELETE',
-                    processData: false,
-                    success: function () {
-                        Swal.fire({
-                            title: 'Exceção Excluída!',
-                            type: 'success',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            $("#btnCancelar").click();
-                            _table.ajax.reload();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: 'Refaça operação',
-                            type: 'error',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            // $("#btnCancelar").click();
-                        });
-                    }
+                    method: 'DELETE',
+                    processData: false
+                }).then(function successCallback() {
+                    Swal.fire({
+                        title: 'Exceção Excluída!',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        $("#btnCancelar").click();
+                        $route.reload();
+                    });
+                }, function errorCallback() {
+                    Swal.fire({
+                        title: 'Refaça operação',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        // $("#btnCancelar").click();
+                    });
                 });
             } else {
                 // $("#btnCancelar").click();

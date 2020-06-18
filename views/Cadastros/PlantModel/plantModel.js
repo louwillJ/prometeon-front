@@ -1,17 +1,10 @@
-app.controller('plantModel', ['$scope', function ($scope) {
-    var _table = '';
+app.controller('plantModel', ['$scope', '$http', function ($scope, $http) {
     var _idPlant = '';
 
-    $(function () {
+    $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
-        _table = $('#datatable_plantModel').DataTable({
-            ajax: {
-                url: Url.plantModel.def,
-                method: 'GET',
-                dataSrc: '',
-                crossDomain: true
-            },
+        $scope.table = $('#datatable_plantModel').DataTable({
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -103,39 +96,45 @@ app.controller('plantModel', ['$scope', function ($scope) {
             ],
         });
 
-        $.ajax({
+        $http({
             url: Url.plantModel.element,
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).done(function (data) {
-            data = data == undefined ? [] : data;
-            data.map(function (element, index) {
+            method: "GET"
+        }).then(function successCallback(response) {
+            response.data = response.data == undefined ? [] : response.data;
+            response.data.map(function (element, index) {
                 if (element.elE_ACTIVE) {
                     $("#inputNivel").append(`<option value=${element.elE_ID}>${element.elE_NAME}</option>`);
                 };
             });
-        });;
+        }, function errorCallback(rejection) {
+            console.log(rejection);
+        });
 
-        combos();
-    });
+        $scope.combos();
+        $scope.getPlantModel();
+    }); //FIM SCOPE
 
-    function combos() {
-        $("#inputSite").html('<option value="">Selecione</option>');;
-        $("#inputArea").html('<option value="">Selecione</option>');;
-        $("#inputLinha").html('<option value="">Selecione</option>');;
+    $scope.getPlantModel = () => {
+        $http.get(Url.plantModel.def).then(function successCallback(response) {
+            $scope.table.clear().draw();
+            $scope.table.rows.add(response.data).draw();
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+    };
+
+    $scope.combos = () => {
+        $("#inputSite").html('<option value="">Selecione:</option>');;
+        $("#inputArea").html('<option value="">Selecione:</option>');;
+        $("#inputLinha").html('<option value="">Selecione:</option>');;
 
         for (let index = 1; index < 4; index++) {
-            $.ajax({
+            $http({
                 url: Url.plantModel.def + `/${index}`,
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).done(function (data) {
-                data = data == undefined ? [] : data;
-                data.map(function (element, index) {
+                method: "GET"
+            }).then(function successCallback(response) {
+                response.data = response.data == undefined ? [] : response.data;
+                response.data.map(function (element, index) {
                     let hash = '';
 
                     if (element.orG_ACTIVE) {
@@ -156,7 +155,9 @@ app.controller('plantModel', ['$scope', function ($scope) {
                         $(`#input${hash}`).append(`<option value=${element.orG_ID}>${element.orG_NAME}</option>`);
                     };
                 });
-            });;
+            }, function errorCallback(response) {
+                console.log(response)
+            });
         };
     };
 
@@ -192,7 +193,7 @@ app.controller('plantModel', ['$scope', function ($scope) {
     });
 
     $('#datatable_plantModel tbody').on('click', 'tr', function () {
-        var data = _table.row(this).data();
+        var data = $scope.table.row(this).data();
 
         switch (data.elE_ID) {
             case 1:
@@ -292,36 +293,29 @@ app.controller('plantModel', ['$scope', function ($scope) {
                         ORG_DESCRIPTION: null
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.plantModel.def,
-                        type: 'POST',
+                        method: 'POST',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: `${who} Cadastrad${it}!`,
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                                combos();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: `${who} Cadastrad${it}!`,
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                            $scope.combos();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -369,36 +363,29 @@ app.controller('plantModel', ['$scope', function ($scope) {
                         ORG_DESCRIPTION: null
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.plantModel.def + `/${_idPlant}`,
-                        type: 'PUT',
+                        method: 'PUT',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: `${who} Editad${it}!`,
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                                combos();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: `${who} Editad${it}!`,
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                            $scope.combos();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -436,32 +423,30 @@ app.controller('plantModel', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                $.ajax({
+                $http({
                     url: Url.plantModel.def + `/${_idPlant}`,
-                    type: 'DELETE',
-                    processData: false,
-                    success: function () {
-                        Swal.fire({
-                            title: `${who} Excluíd${it}!`,
-                            type: 'success',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            $("#btnCancelar").click();
-                            _table.ajax.reload();
-                            combos();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: 'Refaça operação',
-                            type: 'error',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            // $("#btnCancelar").click();
-                        });
-                    }
+                    method: 'DELETE',
+                    processData: false
+                }).then(function successCallback() {
+                    Swal.fire({
+                        title: `${who} Excluíd${it}!`,
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        $("#btnCancelar").click();
+                        $route.reload();
+                        $scope.combos();
+                    });
+                }, function errorCallback() {
+                    Swal.fire({
+                        title: 'Refaça operação',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        // $("#btnCancelar").click();
+                    });
                 });
             } else {
                 // $("#btnCancelar").click();

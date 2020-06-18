@@ -1,16 +1,10 @@
-app.controller('turno', ['$scope', function ($scope) {
-    var _table = '';
+app.controller('turno', ['$scope', '$route', '$http', function ($scope, $route, $http) {
     var _idTurno = '';
-    $(function () {
+
+    $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
-        _table = $('#datatable_turnos').DataTable({
-            ajax: {
-                url: Url.turnos.def,
-                method: 'GET',
-                dataSrc: '',
-                crossDomain: true
-            },
+        $scope.table = $('#datatable_turnos').DataTable({
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -93,10 +87,21 @@ app.controller('turno', ['$scope', function ($scope) {
                 }
             }],
         });
-    });
+
+        $scope.getTurnos();
+    }); //FIM SCOPE
+
+    $scope.getTurnos = () => {
+        $http.get(Url.turnos.def).then(function successCallback(response) {
+            $scope.table.clear().draw();
+            $scope.table.rows.add(response.data).draw();
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+    };
 
     $('#datatable_turnos tbody').on('click', 'tr', function () {
-        var data = _table.row(this).data();
+        var data = $scope.table.row(this).data();
 
         _idTurno = data.tuR_ID;
         $("#inputId").val(data.tuR_NAME);
@@ -147,36 +152,28 @@ app.controller('turno', ['$scope', function ($scope) {
                         tuR_VALIDATE_END: `${moment($("#inputValF").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputFim").val()}:00`,
                         tuR_ACTIVE: true
                     };
-
-                    $.ajax({
+                    $http({
                         url: Url.turnos.def,
-                        type: 'POST',
+                        method: 'POST',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Turno cadastrado!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: 'Turno cadastrado!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -206,35 +203,28 @@ app.controller('turno', ['$scope', function ($scope) {
                         tuR_ACTIVE: true
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.turnos.def + `/${_idTurno}`,
-                        type: 'PUT',
+                        method: 'PUT',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Turno Editado!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: 'Turno Editado!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -255,31 +245,29 @@ app.controller('turno', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                $.ajax({
+                $http({
                     url: Url.turnos.def + `/${_idTurno}`,
-                    type: 'DELETE',
-                    processData: false,
-                    success: function () {
-                        Swal.fire({
-                            title: 'Turno Excluído!',
-                            type: 'success',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            $("#btnCancelar").click();
-                            _table.ajax.reload();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: 'Refaça operação',
-                            type: 'error',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            // $("#btnCancelar").click();
-                        });
-                    }
+                    method: 'DELETE',
+                    processData: false
+                }).then(function successCallback() {
+                    Swal.fire({
+                        title: 'Turno Excluído!',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        $("#btnCancelar").click();
+                        $route.reload();
+                    });
+                }, function errorCallback() {
+                    Swal.fire({
+                        title: 'Refaça operação',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        // $("#btnCancelar").click();
+                    });
                 });
             } else {
                 // $("#btnCancelar").click();

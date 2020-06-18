@@ -16,10 +16,11 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <!-- CSS Files -->
-  <link rel="stylesheet" href="./assets/css/commom.css">
   <link rel="stylesheet" href="./assets/css/buttons.dataTables.min.css">
   <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="./assets/css/now-ui-dashboard.css?v=1.4.1" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/commom.css">
+  <link rel="stylesheet" href="./assets/css/bootstrap-duallistbox.css">
 </head>
 
 <body ng-controller="mainCtrl" class="sidebar-mini">
@@ -69,7 +70,7 @@
             </a>
             <div class="collapse " id="Cadastros">
               <ul class="nav">
-                <li ng-class="{ active: isActive('/Cadastros/GrupoAcesso')}" hidden>
+                <li ng-class="{ active: isActive('/Cadastros/GrupoAcesso') || isActive('/Cadastros/GrupoAcesso/Edit')}">
                   <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/GrupoAcesso">
                     <i class="now-ui-icons design_app"></i>
                     <span class="sidebar-normal">Grupo de Acesso</span>
@@ -82,6 +83,7 @@
                     <span class="sidebar-normal">Plant Model</span>
                   </a>
                 </li>
+
                 <li ng-class="{ active: isActive('/Cadastros/Usuarios')}">
                   <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/Usuarios">
                     <i class="fas fa-user"></i>
@@ -89,14 +91,7 @@
                   </a>
                 </li>
 
-                <!-- <li ng-class="{ active: isActive('/Cadastros/Turnos')}">
-                  <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/Turnos">
-                    <i class="now-ui-icons business_chart-bar-32"></i>
-                    <span class="sidebar-normal">Turnos</span>
-                  </a>
-                </li> -->
-
-                <li ng-class="{ active: isActive('/Cadastros/Turnos') }"> <!--|| isActive('/Cadastros/Turno/Excecao')-->
+                <li ng-class="{ active: isActive('/Cadastros/Turnos') }">
                   <a data-toggle="collapse" data-target="#turnos" href="#/Cadastros/Turnos">
                     <i style="padding: 6px 0 0 8px" class="fas fa-clipboard-list"></i>
                     <p style="padding-left:10px">
@@ -115,13 +110,6 @@
                     </ul>
                   </div>
                 </li>
-
-                <!-- <li ng-class="{ active: isActive('/Cadastros/OrdemProducao')}">
-                  <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/OrdemProducao">
-                    <i class="now-ui-icons business_chart-bar-32"></i>
-                    <span class="sidebar-normal">Ordens de Produção</span>
-                  </a>
-                </li> -->
 
                 <li ng-class="{ active: isActive('/Cadastros/OrdemProducao')}">
                   <a data-toggle="collapse" data-target="#op" href="#/Cadastros/OrdemProducao">
@@ -143,13 +131,6 @@
                   </div>
                 </li>
 
-                <!-- <li ng-class="{ active: isActive('/Cadastros/Receitas')}">
-                  <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/Receitas">
-                    <i class="now-ui-icons business_chart-bar-32"></i>
-                    <span class="sidebar-normal">Receitas</span>
-                  </a>
-                </li> -->
-
                 <li ng-class="{ active: isActive('/Cadastros/Receitas')}">
                   <a data-toggle="collapse" data-target="#receitas" href="#/Cadastros/Receitas">
                     <i style="padding: 6px 0 0 8px" class="fas fa-receipt"></i>
@@ -169,8 +150,6 @@
                     </ul>
                   </div>
                 </li>
-
-
               </ul>
             </div>
           </li>
@@ -225,6 +204,7 @@
 
   <!-- Controllers -->
   <script src="./assets/include/mainCtrl.js"></script>
+  <script src="./assets/include/apiService.js"></script>
   <script src="./assets/include/common.js"></script>
   <script src="views/Cadastros/PlantModel/plantModel.js"></script>
   <script src="views/Cadastros/Usuarios/usuario.js"></script>
@@ -238,37 +218,28 @@
   <script src="views/Cadastros/Receitas/receitasOverview.js"></script>
 
   <!-- Plugins -->
-  <script src="./assets/js/plugins/jquery.blockUI.js"></script>
-  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-  <!-- <script src="./assets/js/plugins/bootstrap-switch.js"></script> -->
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <!-- <script src="./assets/demo/demo.js" type="text/javascript"></script> -->
+  <!-- jQuery blockUI -->
+  <script src="./assets/js/plugins/jquery.blockUI.js" type="text/javascript"></script>
   <!--  Plugin for Sweet Alert -->
-  <script src="./assets/js/plugins/sweetalert2.min.js"></script>
+  <script src="./assets/js/plugins/sweetalert2.min.js" type="text/javascript"></script>
   <!-- Forms Validations Plugin -->
-  <script src="./assets/js/plugins/jquery.validate.min.js"></script>
-  <!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-  <!-- <script src="./assets/js/plugins/jquery.bootstrap-wizard.js"></script> -->
-  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-  <!-- <script src="./assets/js/plugins/bootstrap-selectpicker.js"></script> -->
+  <script src="./assets/js/plugins/jquery.validate.min.js" type="text/javascript"></script>
+  <!-- Bootstrap Switch -->
+  <script src="./assets/js/plugins/bootstrap-switch.js" type="text/javascript"></script>
+  <!-- Bootstrap Select Picker -->
+  <!-- <script src="./assets/js/plugins/bootstrap-select.min.js" type="text/javascript"></script> -->
   <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-  <script src="./assets/js/plugins/bootstrap-datetimepicker.js"></script>
-  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
-  <script src="./assets/js/plugins/jquery.dataTables.min.js"></script>
-  <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-  <!-- <script src="./assets/js/plugins/bootstrap-tagsinput.js"></script> -->
-  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-  <!-- <script src="./assets/js/plugins/jasny-bootstrap.min.js"></script> -->
-  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-  <!-- <script src="./assets/js/plugins/fullcalendar.min.js"></script> -->
-  <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-  <!-- <script src="./assets/js/plugins/jquery-jvectormap.js"></script> -->
-  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-  <!-- <script src="./assets/js/plugins/nouislider.min.js"></script> -->
-  <!-- Chart JS -->
-  <!-- <script src="./assets/js/plugins/chartjs.min.js"></script> -->
-  <!--  Notifications Plugin    -->
-  <!-- <script src="./assets/js/plugins/bootstrap-notify.js"></script> -->
+  <script src="./assets/js/plugins/bootstrap-datetimepicker.js" type="text/javascript"></script>
+  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/-->
+  <script src="./assets/js/plugins/jquery.dataTables.min.js" type="text/javascript"></script>
+  <!-- Plugin para controle de acesso https://www.virtuosoft.eu/code/bootstrap-duallistbox/-->
+  <script src="assets/js/plugins/jquery.bootstrap-duallistbox.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="./assets/js/now-ui-dashboard.min.js?v=1.4.1" type="text/javascript"></script>
+
+
   <!-- Datatables exporting -->
   <script src="./assets/js/plugins/dataTables.buttons.min.js"></script>
   <script src="./assets/js/plugins/buttons.flash.min.js"></script>

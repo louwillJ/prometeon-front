@@ -45,16 +45,34 @@ app.config(function ($routeProvider, $locationProvider) {
       templateUrl: 'views/Cadastros/Receitas/receitasOverview.html',
       controller: 'receitasOverview'
     })
-  .otherwise({
-    redirectTo: '/'
-  });
+    .otherwise({
+      redirectTo: '/login.html'
+    });
   $locationProvider.hashPrefix('');
 });
 
-app.controller('mainCtrl', ['$scope','$location', function ($scope, $location) {
-  $scope.isActive = function (viewLocation) {  
+app.controller('mainCtrl', ['$scope', '$location', function ($scope, $location) {
+  if (sessionStorage.getItem("log") != "in") {
+    window.location.href = "login.html";
+  };
+
+  //   $scope.tokenIsValid = function () {
+  //     $.ajax({
+  //         type: "GET",
+  //         url: "url",
+  //         data: {
+  //         "token": "ENTER THE ACTIVE REFRESH TOKEN HERE"
+  //       },
+  //       dataType: "dataType",
+  //       success: function (response) {
+
+  //       }
+  //     });
+  // };
+
+  $scope.isActive = function (viewLocation) {
     var str = $location.path();
-    var current = (viewLocation === str);   
+    var current = (viewLocation === str);
     return current;
   };
 }]);

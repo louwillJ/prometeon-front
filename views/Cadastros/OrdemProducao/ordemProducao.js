@@ -270,8 +270,6 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                             type: 'error',
                             showConfirmButton: false,
                             timer: 2000
-                        }).then(function () {
-                            // $("#btnCancelar").click();
                         });
                     }
                 });
@@ -317,6 +315,6 @@ function getReceita(){
 
 $(function () {
 
-    getStatusOrdem();
+    // getStatusOrdem();
 
 });

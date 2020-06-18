@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" id="log">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Prometeon
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport' />
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../assets/css/now-ui-dashboard.css?v=1.1.2" rel="stylesheet" />
+    <style>
+        #login {
+            background-color: #061b6d;
+            color: whitesmoke;
+            font-weight: bold;
+            text-shadow: 0 0 10px black;
+            opacity: 0.8;
+        }
+
+        #login:hover {
+            opacity: 1.0;
+        }
+    </style>
+</head>
+
+<body class="sidebar-mini" style="overflow: hidden;zoom: 100% !important;">
+    <div class="wrapper wrapper-full-page">
+        <div class="full-page login-page section-image" style="background-image: url('assets/img/bckimg.jpg');">
+            <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+            <div class="content">
+                <div class="container">
+                    <div class="col-md-4 ml-auto mr-auto">
+                        <div class="card card-login card-plain">
+                            <div class="card-header ">
+                                <div style="margin-bottom:50px;">
+                                    <img src="assets/img/prometeon-logo.png" alt="prometeon">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-group no-border form-control-lg mt-4">
+                                    <span class="input-group-prepend">
+                                        <div class="input-group-text userDiv">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    </span>
+                                    <input id="username" type="text" class="form-control" placeholder="Username"
+                                        style=" border: none; outline: none" autocomplete="off">
+                                </div>
+                                <div>
+                                    <p id="errUserMsg" style="color: red;text-align: center;display: none">Nome de
+                                        usuário não pode ser nulo!</p>
+                                </div>
+                                <div class="input-group no-border form-control-lg mt-1">
+                                    <div class="input-group-prepend ">
+                                        <div class="input-group-text passDiv">
+                                            <i class="fas fa-key"></i>
+                                        </div>
+                                    </div>
+                                    <input id="password" type="password" placeholder="Password" class="form-control"
+                                        style=" border: none; outline: none" autocomplete="off">
+                                </div>
+                                <div>
+                                    <p id="errPassMsg" style="color: red;text-align: center;display: none">Senha de
+                                        usuário não pode ser nula!</p>
+                                </div>
+                            </div>
+                            <div style="margin-left: -26px;">
+                                <p id="errMsg" style="color: red;text-align: center;font-size: large;width:400px;display: none"></p>
+                                <img id="loader" src="assets/icon/Spinner-1s-200px.gif" height="60px" alt="Loading..." style="margin-left: 45%;display: none">
+                            </div>
+                            <div class="card-footer ">
+                                <a id="login" class="btn btn-round btn-lg btn-block mb-3">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="assets/include/urlConfig.js"></script>
+    <script src="assets/js/core/angular.min.js"></script>
+    <script src="assets/js/core/angular-route.min.js"></script>
+    <script src="assets/js/core/jquery.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <!-- Login -->
+    <script src="assets/include/login.js"></script>
+</body>
+
+</html>

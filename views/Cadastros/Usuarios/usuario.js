@@ -1,17 +1,10 @@
-app.controller('usuario', ['$scope', function ($scope) {
-    var _table = '';
+app.controller('usuario', ['$scope', '$route', '$http', function ($scope, $route, $http) {
     var _idUser = '';
 
-    $(function () {
+    $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
-        _table = $('#datatable_usuarios').DataTable({
-            ajax: {
-                url: Url.usuarios.def,
-                method: 'GET',
-                dataSrc: '',
-                crossDomain: true
-            },
+        $scope.table = $('#datatable_usuarios').DataTable({
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -84,22 +77,33 @@ app.controller('usuario', ['$scope', function ($scope) {
             // ],
         });
 
-        $.ajax({
-            url: Url.usuarios.acesso,
+        $http({
+            url: Url.acesso.grupo,
             method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).done(function (data) {
-            data = data == undefined ? [] : data;
-            data.map(function (element, index) {
+        }).then(function successCallback(response) {
+            response.data = response.data == undefined ? [] : response.data;
+            $("#inputAcesso").append(`<option selected value="">Selecione:</option>`);
+            response.data.forEach(function (element, index) {
                 $("#inputAcesso").append(`<option value=${element.leV_ID}>${element.leV_NAME}</option>`);
             });
-        });;
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+
+        $scope.getUsuarios();
     });
 
+    $scope.getUsuarios = () => {
+        $http.get(Url.usuarios.def).then(function successCallback(response) {
+            $scope.table.clear().draw();
+            $scope.table.rows.add(response.data).draw();
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+    };
+
     $('#datatable_usuarios tbody').on('click', 'tr', function () {
-        var data = _table.row(this).data();
+        var data = $scope.table.row(this).data();
 
         _idUser = data.usR_ID;
         $("#inputUser").val(data.usR_NAME);
@@ -117,7 +121,7 @@ app.controller('usuario', ['$scope', function ($scope) {
         $("#inputUser").val("");
         $("#inputNome").val("");
         $("#inputSenha").val("");
-        $("#inputAcesso").val(0);
+        $("#inputAcesso").val("");
     });
 
     $("#btnUsuario").click(function () {
@@ -141,35 +145,27 @@ app.controller('usuario', ['$scope', function ($scope) {
                         usR_ACTIVE: true
                     };
 
-                    $.ajax({
+                    $http({
                         url: Url.usuarios.def,
-                        type: 'POST',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Usuário cadastrado!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        method: 'POST',
+                        data: JSON.stringify(data)
+                    }).then(function successCallback(response) {
+                        Swal.fire({
+                            title: 'Usuário Cadastrado!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -195,42 +191,29 @@ app.controller('usuario', ['$scope', function ($scope) {
                         USR_ACCESS_LEVEL: parseInt($("#inputAcesso").val()),
                         usR_ACTIVE: true
                     };
-                    //     id: _idUser,
-                    //     user: $("#inputUser").val(),
-                    //     nome: $("#inputNome").val(),
-                    //     senha: $("#inputSenha").val(),
-                    //     acesso: $("#inputAcesso").val()
-                    // };
 
-                    $.ajax({
+                    $http({
                         url: Url.usuarios.def + `/${_idUser}`,
-                        type: 'PUT',
+                        method: 'PUT',
                         data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
-                            Swal.fire({
-                                title: 'Usuário Editado!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                _table.ajax.reload();
-                            });
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
-                            });
-                        }
+                        processData: false
+                    }).then(function successCallback() {
+                        Swal.fire({
+                            title: 'Usuário Editado!',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            $("#btnCancelar").click();
+                            $route.reload();
+                        });
+                    }, function errorCallback() {
+                        Swal.fire({
+                            title: 'Refaça operação',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
                     });
                 } else {
                     // $("#btnCancelar").click();
@@ -251,31 +234,29 @@ app.controller('usuario', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                $.ajax({
+                $http({
                     url: Url.usuarios.def + `/${_idUser}`,
-                    type: 'DELETE',
-                    processData: false,
-                    success: function () {
-                        Swal.fire({
-                            title: 'Usuário Excluído!',
-                            type: 'success',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            $("#btnCancelar").click();
-                            _table.ajax.reload();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: 'Refaça operação',
-                            type: 'error',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            // $("#btnCancelar").click();
-                        });
-                    }
+                    method: 'DELETE',
+                    processData: false
+                }).then(function successCallback() {
+                    Swal.fire({
+                        title: 'Usuário Excluído!',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        $("#btnCancelar").click();
+                        $route.reload();
+                    });
+                }, function errorCallback() {
+                    Swal.fire({
+                        title: 'Refaça operação',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        // $("#btnCancelar").click();
+                    });
                 });
             } else {
                 // $("#btnCancelar").click();

@@ -1,15 +1,20 @@
-var dev = 'http://localhost:5000';
+var dev = 'http://localhost:4000';
 var prod = '';
 
 var ambiente = dev;
 var Url = {
   'usuarios': {
     'def': `${ambiente}/api/usuarios`,
-    'acesso': `${ambiente}/api/nivelAcesso`
+    'logout': `${ambiente}/api/usuarios/revoke-token`
+  },
+  'acesso': {
+    'def': `${ambiente}/api/nivelManagement`,
+    'grupo': `${ambiente}/api/nivelAcesso`,
+    'screen': `${ambiente}/api/screen`
   },
   'plantModel': {
     'def': `${ambiente}/api/plantModel`,
-    'element':`${ambiente}/api/orgElement`
+    'element': `${ambiente}/api/orgElement`
   },
   'turnos': {
     'def': `${ambiente}/api/turnos`,

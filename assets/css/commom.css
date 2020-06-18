@@ -107,9 +107,11 @@
 .fs4 {
     font-size: 3rem !important;
 }
+
 .dt-button.btn-export {
     border-radius: 5px !important;
 }
+
 .dt-button.btn-export:hover {
     color: #2CA8FF !important;
     border-radius: 5px !important;
