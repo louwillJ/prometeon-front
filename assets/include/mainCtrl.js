@@ -41,9 +41,9 @@ app.config(function ($routeProvider, $locationProvider) {
       templateUrl: 'views/Cadastros/Receitas/receitas.html',
       controller: 'receitas'
     })
-    .when('/Cadastros/Receitas/Overview', {
-      templateUrl: 'views/Cadastros/Receitas/receitasOverview.html',
-      controller: 'receitasOverview'
+    .when('/Cadastros/Receitas/HistoricoRevisao', {
+      templateUrl: 'views/Cadastros/Receitas/receitasHistoricoRevisao.html',
+      controller: 'receitasHistoricoRevisao'
     })
     .otherwise({
       redirectTo: '/login.html'

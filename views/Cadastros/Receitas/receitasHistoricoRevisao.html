@@ -1,0 +1,111 @@
+<div class="content geralPadding pt-4">
+    <!--Title-->
+    <div class="row">
+        <div class="col-sm-6" style="max-height: 93px;">
+            <div class="header">
+                <h4 class="title">Receitas - Histórico de Revisão </h4>
+            </div>
+        </div>
+        <!-- <div class="col-sm-6">
+            <div class="row card-body float-right" style="padding-bottom:16px">
+                <button id="btnUsuario" class="btn btn-success float-right">Cadastrar</button>
+                <button id="btnExcluir" class="btn btn-danger float-right" style="display: none;">Excluir</button>
+                <button id="btnCancelar" class="btn float-right">Cancelar</button>
+            </div>
+        </div> -->
+    </div>
+    <div class="content geralPadding">
+        <div class="row ml-auto mr-auto">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Código da Receita</label>
+                        <div class="form-group">
+                            <input id="inputId" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Produto</label>
+                        <div class="form-group">
+                            <select id="selectMaterial" type="text" class="form-control"></select>
+                        </div>
+                    </div>
+
+             
+                    <div class="col-md-2">
+                        <label>Status da Receita</label>
+                        <div class="form-group">
+                            <select id="inputStatusReceita" type="text" class="form-control">
+                                <option value="" selected>Selecione...</option>
+                                <option value="True">Ativo</option>
+                                <option value="False">Inativo</option>
+                            </select>
+                        </div>
+                    </div> 
+
+                    <div class="col-md-1">                   
+                        <div class="form-group">
+                             <button id="btnPesquisar" class="btn btn-success">Pesquisar</button>
+                        </div>
+                    </div> 
+
+                    <div class="col-md-1">                   
+                        <div class="form-group">
+                             <button id="btnCancelar" class="btn ">Cancelar</button>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 ml-auto mr-auto">
+                <!--Main tabs-->
+                <div class="card-body card" id="Card_tabela" style="display: none;">
+                    <!--Tab Content-->
+                    <div class="tab-content">
+                        <table id="datatable_receitas_overview" 
+                            class="table table-hover table-striped table-bordered text-center" cellspacing="0"
+                            width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="20%">Código da Receita</th>
+                                    <th width="30%">Produto</th>
+                                    <th width="10%">Equipamento</th>
+                                    <th width="10%">Versão</th>
+                                    <th width="10%">Data de Modificação</th>
+                                    <th width="10%">Status</th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="height: 25px;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                   
+                                </tr>
+                                
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Receita</th>
+                                    <th>Produto</th>
+                                    <th>Equipamento</th>
+                                    <th>Versão</th>
+                                    <th>Data de Modificação</th>
+                                    <th>Status</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                   
+                           
+                          
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

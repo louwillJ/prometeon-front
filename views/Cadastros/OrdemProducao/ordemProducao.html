@@ -21,7 +21,7 @@
                     <div class="col-md-2">
                         <label>Nº Ordem Produção</label>
                         <div class="form-group">
-                            <input id="inputOP" type="text" class="form-control">
+                            <input id="inputOP" type="text" class="form-control" disabled>
                         </div>
                     </div>
 
@@ -35,12 +35,12 @@
                     <div class="col-md-3">
                         <label>Receita</label>
                         <div class="form-group">
-                            <input id="inputReceita" type="text" class="form-control">
+                            <select id="selectIdReceita" type="text" class="form-control" ></select>
                         </div>
                     </div>
 
                     <div class="col-md-2">
-                        <label>Nº de Batches</label>
+                        <label>Quantidade</label>
                         <div class="form-group">
                             <input id="inputQtd" type="text" class="form-control">
                         </div>
@@ -51,14 +51,14 @@
                     <div class="col-md-2">
                         <label>Data Prevista</label>
                         <div class="form-group">
-                            <input id="inputDtPrevista" type="text" class="form-control">
+                            <input id="inputDtPrevista" onclick="datepicker(this)" type="text" class="form-control">
                         </div>
                     </div>
 
                     <div class="col-md-2">
                         <label>Status</label>
                         <div class="form-group">
-                            <select id="inputStatus" type="text" class="form-control"></select>
+                            <select id="inputStatus" type="text" class="form-control" disabled></select>
                         </div>
                     </div>
 
@@ -67,7 +67,19 @@
                         <div class="form-group">
                             <input id="inputDtCriacao" type="text" class="form-control" disabled>
                         </div>
-                    </div>                    
+                    </div>            
+                    <div class="col-md-2" style="display: none;">
+                        <label>MAT_SAP_CODE</label>
+                        <div class="form-group">
+                            <input id="inputSapMatCode" type="text" class="form-control" disabled>
+                        </div>
+                    </div>    
+                    <div class="col-md-2" style="display: none;">
+                        <label>C_ESPEC</label>
+                        <div class="form-group">
+                            <input id="inputCespec" type="text" class="form-control" disabled>
+                        </div>
+                    </div>            
 
                 </div>
             </div>
@@ -83,62 +95,19 @@
                             width="100%">
                             <thead>
                                 <tr>
-                                    <th>Ordem Produção</th>
-                                    <th>Planta</th>
-                                    <th>Receita</th>
-                                    <th>Nº de Batches</th>
-                                    <th>Data Criação</th>
-                                    <th>Data Prevista</th>                                    
-                                    <th>Status OP</th>
+                                    <th width="10%">Ordem Produção</th>
+                                    <th width="10%">Planta</th>
+                                    <th width="20%">Código da Receita</th>
+                                    <th width="20%">Produto</th>
+                                    <th width="10%">Quantidade</th>
+                                    <th width="10%">Data Prevista</th> 
+                                    <th width="10%">Data Criação</th>                                                                       
+                                    <th width="10%">Status OP</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr style="height: 15px;">
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 15px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 15px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 15px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 15px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 15px;">
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -152,8 +121,9 @@
                                 <tr>
                                     <th>Ordem Produção</th>
                                     <th>Planta</th>
-                                    <th>Receita</th>
-                                    <th>Nº de Batches</th>
+                                    <th>Código da Receita</th>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
                                     <th>Data Criação</th>
                                     <th>Data Prevista</th>                                    
                                     <th>Status OP</th>

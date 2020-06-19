@@ -2,6 +2,7 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
     //SCOPE VARIABLE
     $scope.idScreen = $location.search().screen;
     $scope.usuarios = []
+    $scope.usuariosDbB4Save = []
     $scope.telas = []
     $scope.telasPermitidas = []
 
@@ -52,16 +53,16 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
         $http.get(Url.acesso.grupo + `/${$scope.idScreen}`).then(function successCallback(response) {
             $('#lvlTitle').text(response.data.leV_NAME);
         }, function errorCallback(response) {
-            console.log(response)
+            console.log(response);
         });
-        
+
         $http.get(Url.usuarios.def).then(function successCallback(response) {
             $scope.usuarios = response.data;
             setTimeout(() => {
                 $scope.getScreen();
             }, 100);
         }, function errorCallback(response) {
-            console.log(response)
+            console.log(response);
         });
     };
 
@@ -69,7 +70,7 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
         $http.get(Url.acesso.screen).then(function successCallback(response) {
             $scope.telas = response.data;
         }, function errorCallback(response) {
-            console.log(response)
+            console.log(response);
         });
 
         $http.get(Url.acesso.def).then(function successCallback(response) {
@@ -78,7 +79,7 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
                 $scope.getGrupos();
             }, 100);
         }, function errorCallback(response) {
-            console.log(response)
+            console.log(response);
         });
     };
 
@@ -86,6 +87,7 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
         //Grupos
         for (i = 0; i < $scope.usuarios.length; i++) {
             if ($scope.usuarios[i].usR_ACCESS_LEVEL == $scope.idScreen) {
+                $scope.usuariosDbB4Save.push($scope.usuarios[i].usR_ID);
                 $("#nomeUsuario").find("option[value='" + $scope.usuarios[i].usR_ID + "']").attr('selected', 'selected');
                 $("#bootstrap-duallistbox-selected-list_duallistboxUser").trigger('click');
             };
@@ -95,24 +97,37 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
         //Telas
         for (i = 0; i < $scope.telasPermitidas.length; i++) {
             for (j = 0; j < $scope.telas.length; j++) {
-                if ($scope.telas[j].srC_ID == $scope.telasPermitidas[i].srC_ID) {
-                    $("#telaSistema").find("option[value='" + $scope.telasPermitidas[i].scR_ID + "']").attr('selected', 'selected')
-                    $("#bootstrap-duallistbox-selected-list_duallistboxTelas").trigger('click')
+                if ($scope.telasPermitidas[i].leV_ID == $scope.idScreen) {
+                    if ($scope.telas[j].srC_ID == $scope.telasPermitidas[i].srC_ID) {
+                        $("#telaSistema").find("option[value='" + $scope.telasPermitidas[i].scR_ID + "']").attr('selected', 'selected');
+                        $("#bootstrap-duallistbox-selected-list_duallistboxTelas").trigger('click');
+                    };
                 };
             };
         };
         $('#telaSistema').bootstrapDualListbox(); //LISTBOX TELAS
     };
+    // console.log($scope.usuariosDbB4Save);
 
     $scope.saveData = () => {
         //Ajuste de JSON
         var idUserPermitidos = $('#nomeUsuario').val();
-        var arraySendUser = [];
-        idUserPermitidos.forEach(element => {
-            arraySendUser.push({
-                "usR_ID": Number(element)
+        var userObjData0 = [];
+        var userObjData = [];
+
+        $scope.usuariosDbB4Save.forEach(element => {
+            userObjData0.push({
+                "usR_ID": Number(element),
+                "usR_ACCESS_LEVEL": 0
             });
         });
+
+        idUserPermitidos.forEach(element => {
+            userObjData.push({
+                "usR_ID": Number(element),
+                "usR_ACCESS_LEVEL": Number($scope.idScreen)
+            });
+        })
         //Ajuste de JSON
         var idTelasPermitidas = $('#telaSistema').val();
         var arraySendTelas = [];
@@ -121,27 +136,24 @@ app.controller("grupoAcessoEdit", function ($scope, $http, $route, $location) {
                 "scR_ID": Number(element)
             });
         });
-        console.log(arraySendUser);
-        console.log(arraySendTelas);
+        // console.log(userObjData);
+        // console.log(arraySendTelas);
 
-        //Prepara DATA
-
-        // var usrData = {
-        //     usR_ID: arraySendUser[i],
-        //     usR_NAME: $("#inputUser").val(),
-        //     usR_EMAIL: $("#inputNome").val(),
-        //     usR_SENHA: $("#inputSenha").val(),
-        //     USR_ACCESS_LEVEL: parseInt($("#inputAcesso").val()),
-        //     usR_ACTIVE: true
-        // };
-
-        //  url: Url.usuarios.def + `/${_idUser}`,
-        // $scope.grupo.user = arraySendUser;
-
-        // $http.put('http://spi073:8010/authorize/api/Profile', JSON.stringify($scope.grupo)).then(function successCallback(response) {
-        //     console.log('SUCESSO')
-        // }, function errorCallback(response) {
-        //     console.log(response)
-        // });
+        $http.put(Url.usuarios.def, JSON.stringify(userObjData0)).then(function successCallback() {
+            $http.put(Url.usuarios.def, JSON.stringify(userObjData)).then(function successCallback() {
+                Swal.fire({
+                    title: `Grupo Salvo!`,
+                    type: 'success',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    $route.reload();
+                });
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }, function errorCallback(response) {
+            console.log(response);
+        });
     }
 });

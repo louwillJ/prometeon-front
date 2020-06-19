@@ -152,6 +152,7 @@ app.controller('turno', ['$scope', '$route', '$http', function ($scope, $route, 
                         tuR_VALIDATE_END: `${moment($("#inputValF").val(), "DD/MM/YYYY").format("YYYY-MM-DD")}T${$("#inputFim").val()}:00`,
                         tuR_ACTIVE: true
                     };
+                    
                     $http({
                         url: Url.turnos.def,
                         method: 'POST',

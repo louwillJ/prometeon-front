@@ -1,17 +1,10 @@
-app.controller('ordemProducao', ['$scope', function ($scope) {
-    var table = '';
+app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, $route, $http) {
     var _idOP = '';
 
-    $(function () {
+    $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
-        table = $('#datatable_ordemProducao').DataTable({
-            ajax: {
-                url: Url.ordemProducao.def,
-                method: 'GET',
-                dataSrc: '',
-                crossDomain: true
-            },     
+        $scope.table = $('#datatable_ordemProducao').DataTable({
             "language": {
                 "decimal": "",
                 "emptyTable": "Nenhum resultado encontrado",
@@ -64,151 +57,265 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                     // }
                 },
             ],
+            columnDefs: [{
+                    targets: 5,
+                    render: function (data) {
+                        return moment(data).format('DD/MM/YYYY hh:mm');
+                    }
+                },
+                {
+                    targets: 6,
+                    render: function (data) {
+                        return moment(data).format('DD/MM/YYYY');
+                    }
+                },
+                {
+                    targets: 7,
+                    render: function (data) {
+                        if (data == 'Criada') { //criada
+                            return "<span style='color:orange;'>" + data + "</span>"
+                        } else if (data == 'Em Espera') { //Em espera
+                            return "<span style='color:green;'>" + data + "</span>"
+                        } else if (data == 'Em Produção') { //Em produção
+                            return "<span style='color:blue;'>" + data + "</span>"
+                        } else if (data == 'Finalizada') { //Finalizada
+                            return "<span style='color:brown;'>" + data + "</span>"
+                        } else if (data == 'Cancelada') { //Cancelada
+                            return "<span style='color:gray;'>" + data + "</span>"
+                        } else {
+                            return "<span style='color:black;'>" + data + "</span>"
+                        }
+                    }
+                }
+            ],
             responsive: true,
             columns: [{
-                data: 'orD_ID'
-            },    
-            {
-                data: 'orG_ID'
-            }, 
-            {
-                data: 'boM_ID'
-            },   
-            {
-                data: 'orD_QUANTITY'
-            },
-            {
-                data: 'orD_DATE_CREATION'
-            },              
-            {
-                data: 'orD_DATE_PLANNED'
-            },
-            {
-                data: 'stA_ID'
-            },            
-        ],
-        });
+                    data: 'orD_ID'
+                },
+                {
+                    data: 'orG_ID'
+                },
+                {
+                    "data": 'iD_RECEITA',
+                    "render": function (d, t, data) {
+                        return data.receita.c_ESPEC + " - " + data.receita.maT_SAP_CODE;
+                    }
+                },
+                {
+                    data: 'material.maT_DESC'
+                },
+                {
+                    data: 'orD_QUANTITY'
+                },
+                {
+                    data: 'orD_DATE_PLANNED'
+                },
+                {
+                    data: 'orD_DATE_CREATION'
+                },
+                {
+                    data: 'ordemStatus.stA_NOME'
+                },
+            ],
+        })
+
+        $scope.getOPs();
+        getReceita();
+        getStatusOrdem();
 
     });
 
+    $scope.getOPs = () => {
+        $http.get(Url.ordemProducao.def).then(function successCallback(response) {
+            $scope.table.clear().draw();
+            $scope.table.rows.add(response.data).draw();
+        }, function errorCallback(response) {
+            console.log(response)
+        });
+    };
+
     $('#datatable_ordemProducao tbody').on('click', 'tr', function () {
-        var data = table.row(this).data();
+        var data = $scope.table.row(this).data();
+
+        //Só é possiel editar Ordem de Produção com status "Criadas".
+        if (data.ordemStatus.stA_ID == 1) {
+            $("#btnOP").prop("disabled", false);
+        } else {
+            $("#btnOP").prop("disabled", true);
+        }
+
+        //---------------------------------------------------------------------
+        //uma receita vinculada anteriormente a uma OP pode estar Inativa, caso esteja Inativa, deverá selecionar a receita
+        //na versão atual, que está Ativa, contida no select da Receita.
+
+        //iguala o texto da linha selecionada à formatação contida no text do select
+        var receitaText = data.receita.c_ESPEC + "-" + data.receita.maT_SAP_CODE + " - " + data.material.maT_DESC;
+
+        $('#selectIdReceita option:selected').removeAttr('selected');
+
+        var opt = $('#selectIdReceita option').filter(function (el) {
+            return $(this).text() == receitaText;
+        });
+
+        opt.attr('selected', true);
+        //---------------------------------------------------------------------
+
 
         _idOP = data.orD_ID;
-       // $("#inputOP").val(data.ORD_ID);
+        // $("#inputOP").val(data.ORD_ID);
+        $("#inputOP").val(data.orD_ID);
         $("#inputCentro").val(data.orG_ID);
-        $("#inputReceita").val(data.boM_ID);
+
+        $("#inputCespec").val(data.receita.c_ESPEC);
+        $("#inputSapMatCode").val(data.receita.maT_SAP_CODE);
+
         $("#inputQtd").val(data.orD_QUANTITY);
-        $("#inputDtPrevista").val(data.orD_DATE_PLANNED);
-        $("#inputStatus").val(data.stA_ID);
-        $("#inputDtCriacao").val(data.orD_DATE_CREATION);
+        $("#inputDtPrevista").val(moment(data.orD_DATE_PLANNED).format('DD/MM/YYYY'));
+        $("#inputStatus").val(data.ordemStatus.stA_ID);
+        $("#inputDtCriacao").val(moment(data.orD_DATE_CREATION).format('DD/MM/YYYY hh:mm'));
 
         $("#btnExcluir").css("display", "block");
         $("#btnOP").removeClass("btn-success").addClass("btn-warning").text("Editar");
     });
 
     $("#btnCancelar").click(function () {
+        _idOP = '';
         $("#btnOP").removeClass("btn-warning").addClass("btn-success").text("Cadastrar");
+        $("#btnOP").prop("disabled", false);
         $("#btnExcluir").css("display", "none");
 
         $("#inputOP").val("");
         $("#inputCentro").val("");
-        $("#inputReceita").val("");
         $("#inputQtd").val("");
         $("#inputDtPrevista").val("");
         $("#inputStatus").val("");
         $("#inputDtCriacao").val("");
+        $('#selectIdReceita option:selected').removeAttr('selected');
+        $("#selectIdReceita").val("");
+        $("#inputCespec").val("");
+        $("#inputSapMatCode").val("");
 
     });
 
     $("#btnOP").click(function () {
         if ($("#btnOP").hasClass("btn-success")) {
-            Swal.fire({
-                title: `Cadastrar Ordem de Produção?`,
-                // text: `Esta operação não poderá ser desfeita!`,
-                type: 'warning',
-                showCancelButton: true,
-                reverseButtons: true,
-                allowOutsideClick: false,
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.value) {
-                    var data = {                                             
-                        orD_DATE_CREATION: $("#inputDtPrevista").val(),// $("#inputDtCriacao").val(),
-                        orD_QUANTITY: parseInt($("#inputQtd").val()),
-                        stA_ID: parseInt($("#inputStatus").val()),
-                        orG_ID: parseInt($("#inputCentro").val()),
-                        orD_DATE_PLANNED: $("#inputDtPrevista").val(),
-                        boM_ID: parseInt($("#inputReceita").val()),
-                        orD_ACTIVE: true                    
-                    };
-                    $.ajax({
-                        url: Url.ordemProducao.def,
-                        type: 'POST',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
+
+            $("#inputStatus").val("");
+            //$("#inputStatus").prop('disabled',true);
+
+            if ($('#selectIdReceita option:selected').val() != "") {
+
+                Swal.fire({
+                    title: `Cadastrar Ordem de Produção?`,
+                    // text: `Esta operação não poderá ser desfeita!`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+
+                        var dataPrevista = moment($("#inputDtPrevista").val(), "DD/MM/YYYY");
+
+                        //Feito isso basta definir o formato de saída:
+                        console.log(dataPrevista.format("YYYY-MM-DDT00:00:00"));
+                        console.log(dataPrevista.format("YYYY-MM-DD") + " oi: " + $("#inputDtPrevista").val());
+
+                        var data = {
+                            orD_DATE_CREATION: moment().format(), //nasce com a data atual
+                            orD_QUANTITY: parseInt($("#inputQtd").val()),
+                            stA_ID: 1, // Nasce como Criada //parseInt($("#inputStatus").val()),
+                            orG_ID: parseInt($("#inputCentro").val()),
+                            orD_DATE_PLANNED: dataPrevista, //$("#inputDtPrevista").val(),
+                            iD_RECEITA: parseInt($('#selectIdReceita option:selected').val()),
+                            maT_SAP_CODE: $("#inputSapMatCode").val(),
+                            c_ESPEC: $("#inputCespec").val(),
+                            orD_ACTIVE: true
+                        };
+
+                        $http({
+                            url: Url.ordemProducao.def,
+                            method: 'POST',
+                            data: JSON.stringify(data),
+                            processData: false
+                        }).then(function successCallback() {
                             Swal.fire({
-                                title: 'Ordem de Produção cadastrada!',
+                                title: 'Ordem de Produção Cadastrada!',
                                 type: 'success',
                                 showConfirmButton: false,
                                 timer: 2000
                             }).then(function () {
                                 $("#btnCancelar").click();
-                                table.ajax.reload();
+                                // $route.reload();
                             });
-                        },
-                        error: function () {
+                        }, function errorCallback() {
                             Swal.fire({
-                                title: 'Refaça a operação',
+                                title: 'Refaça operação',
                                 type: 'error',
                                 showConfirmButton: false,
                                 timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
                             });
-                        }
-                    });
-                    
-                } else {
-                   // $("#btnCancelar").click();
-                };
-            });
-        } else if ($("#btnOP").hasClass("btn-warning")) {
-            Swal.fire({
-                title: `Editar Ordem de Produção?`,
-                text: `Esta operação não poderá ser desfeita!`,
-                type: 'warning',
-                showCancelButton: true,
-                reverseButtons: true,
-                allowOutsideClick: false,
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.value) {
-                    var data = {
-                        orD_ID: _idOP,
-                        orD_DATE_CREATION: $("#inputDtPrevista").val(),// $("#inputDtCriacao").val(),
-                        orD_QUANTITY: parseInt($("#inputQtd").val()),
-                        stA_ID: parseInt($("#inputStatus").val()),
-                        orG_ID: parseInt($("#inputCentro").val()),
-                        orD_DATE_PLANNED: $("#inputDtPrevista").val(),
-                        boM_ID: parseInt($("#inputReceita").val()),
-                        orD_ACTIVE: true 
+                        });
+
+                    } else {
+                        // $("#btnCancelar").click();
                     };
-                    $.ajax({
-                        url: Url.ordemProducao.def + `/${_idOP}`,
-                        type: 'PUT',
-                        data: JSON.stringify(data),
-                        processData: false,
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        success: function () {
+                });
+
+            } else {
+                Swal.fire({
+                    title: 'É necessário selecionar uma receita.',
+                    type: 'info',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    // $("#btnCancelar").click();
+                    $("#selectIdReceita").focus();
+                });
+
+            }
+        } else if ($("#btnOP").hasClass("btn-warning")) {
+
+            if ($('#selectIdReceita option:selected').val() != "") {
+
+                Swal.fire({
+                    title: `Editar Ordem de Produção?`,
+                    text: `Esta operação não poderá ser desfeita!`,
+                    type: 'warning',
+                    showCancelButton: true,
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+
+                        //var dtPrevista = moment(new Date($("#inputDtPrevista").val())).format("YYYY-MM-DDT00:00:00");
+                        //var dtCriacao = moment(new Date($("#inputDtCriacao").val())).format("YYYY-MM-DDTHH:mm:ss");
+                        var dataPrevista = moment($("#inputDtPrevista").val(), "DD/MM/YYYY");
+                        var dtCriacao = moment($("#inputDtCriacao").val(), "DD/MM/YYYY HH:mm")
+
+                        var data = {
+                            orD_ID: _idOP,
+                            orD_DATE_CREATION: dtCriacao, // $("#inputDtCriacao").val(),
+                            orD_QUANTITY: parseInt($("#inputQtd").val()),
+                            stA_ID: parseInt($("#inputStatus").val()),
+                            orG_ID: parseInt($("#inputCentro").val()),
+                            orD_DATE_PLANNED: dataPrevista,
+                            iD_RECEITA: parseInt($('#selectIdReceita option:selected').val()),
+                            maT_SAP_CODE: $("#inputSapMatCode").val(),
+                            c_ESPEC: $("#inputCespec").val(),
+                            orD_ACTIVE: true
+                        };
+
+                        $http({
+                            url: Url.ordemProducao.def + `/${_idOP}`,
+                            method: 'PUT',
+                            data: JSON.stringify(data),
+                            processData: false
+                        }).then(function successCallback() {
                             Swal.fire({
                                 title: 'Ordem de Produção Editada!',
                                 type: 'success',
@@ -216,25 +323,45 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
                                 timer: 2000
                             }).then(function () {
                                 $("#btnCancelar").click();
-                                table.ajax.reload();
+                                // $route.reload();
                             });
-                        },
-                        error: function () {
+                        }, function errorCallback() {
                             Swal.fire({
                                 title: 'Refaça operação',
                                 type: 'error',
                                 showConfirmButton: false,
                                 timer: 2000
-                            }).then(function () {
-                                // $("#btnCancelar").click();
                             });
-                        }
-                    });
-                } else {
-                   // $("#btnCancelar").click();
-                };
-            });
+                        });
+                    } else {
+                        // $("#btnCancelar").click();
+                    };
+                });
+            } else {
+                Swal.fire({
+                    title: 'É necessário selecionar uma receita.',
+                    type: 'info',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(function () {
+                    // $("#btnCancelar").click();
+                    $("#selectIdReceita").focus();
+                });
+
+            }
         };
+    });
+
+    $('#selectIdReceita').on('change', function () {
+
+        var valueSelected = $('#selectIdReceita option:selected').text();
+
+        var ids = valueSelected.split("-");
+
+        $("#inputCespec").val(ids[0]);
+        $("#inputSapMatCode").val(ids[1]);
+
+
     });
 
     $("#btnExcluir").click(function () {
@@ -249,72 +376,33 @@ app.controller('ordemProducao', ['$scope', function ($scope) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                $.ajax({
+                $http({
                     url: Url.ordemProducao.def + `/${_idOP}`,
-                    type: 'DELETE',
-                    processData: false,
-                    success: function () {
-                        Swal.fire({
-                            title: 'Ordem de Produção Excluída!',
-                            type: 'success',
-                            showConfirmButton: false,
-                            timer: 2000
-                        }).then(function () {
-                            $("#btnCancelar").click();
-                             table.ajax.reload();
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: 'Refaça operação',
-                            type: 'error',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                    }
+                    method: 'DELETE',
+                    processData: false
+                }).then(function successCallback() {
+                    Swal.fire({
+                        title: 'Ordem de Produção Excluída!',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
+                        $("#btnCancelar").click();
+                        // $route.reload();
+                    });
+                }, function errorCallback() {
+                    Swal.fire({
+                        title: 'Refaça operação',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                 });
             } else {
                 $("#btnCancelar").click();
             };
         });
+        $("#inputStatus").prop("disabled", true);
     });
+
 }]);
-
-
-
-function getStatusOrdem(){
-    var status;
-
-    $.getJSON("http://localhost:5000/api/op_status" , function (data) {
-        $.each(data, function (key, val) {
-            status += "<option value='" + val.stA_ID+ "'>" + val.stA_NOME+ "</option>";  
-            console.log(val.stA_NOME);  
-        });
-
-        var header = '<option value=\'\'>Select...</option>';
-        $('#inputStatus').html(header + status);
-    });
-
-}
-
-/*
-function getReceita(){
-    var status;
-
-    $.getJSON("http://localhost:5000/api/receita" , function (data) {
-        $.each(data, function (key, val) {
-            status += "<option value='" + val.stA_ID+ "'>" + val.stA_NOME+ "</option>";  
-            console.log(val.stA_NOME);  
-        });
-
-        var header = '<option value=\'\'>Select...</option>';
-        $('#inputStatus').html(header + status);
-    });
-
-}*/
-
-$(function () {
-
-    // getStatusOrdem();
-
-});

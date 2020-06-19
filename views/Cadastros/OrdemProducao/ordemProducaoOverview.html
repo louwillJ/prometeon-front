@@ -6,110 +6,101 @@
                 <h4 class="title">Ordens de Produção</h4>
             </div>
         </div>
-        <!-- <div class="col-sm-6">
+        <div class="col-sm-6">
             <div class="row card-body float-right" style="padding-bottom:16px">
-                <button id="btnUsuario" class="btn btn-success float-right">Cadastrar</button>
-                <button id="btnExcluir" class="btn btn-danger float-right" style="display: none;">Excluir</button>
-                <button id="btnCancelar" class="btn float-right">Cancelar</button>
+                <!-- <button id="btnOwP" class="btn btn-success float-right">Cadastrar</button> -->
+                <!-- <button id="btnExcluir" class="btn btn-danger float-right" style="display: none;">Excluir</button> -->
+                
             </div>
-        </div> -->
+        </div>
     </div>
     <div class="content geralPadding">
-        <!-- <div class="row ml-auto mr-auto">
+        <div class="row ml-auto mr-auto">
             <div class="card card-body">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label>Nº Ordem Produção</label>
                         <div class="form-group">
-                            <input id="inputUser" type="text" class="form-control">
+                            <input id="inputOP" type="text" class="form-control">
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <label>Data Prevista</label>
-                        <label>Quantidade</label>
+                    <div class="col-md-2">
+                        <label>Data Prevista (Início)</label>
                         <div class="form-group">
-                            <input id="inputNome" type="text" class="form-control">
+                            <input id="inputDtPrevistaInicio" onclick="datepicker(this)" type="text" class="form-control">
                         </div>
-                    </div>
+                    </div>                  
 
-                    <div class="col-md-3">
-                        <label>Quantidade</label>
+                    <div class="col-md-2">
+                        <label>Data Prevista (Fim)</label>
                         <div class="form-group">
-                            <input id="inputQtd" type="text" class="form-control">
+                            <input id="inputDtPrevistaFim" onclick="datepicker(this)" type="text" class="form-control">
                         </div>
-                    </div>
+                    </div>   
 
-                    <div class="col-md-3">
-                        <label>Receita</label>
+                    <div class="col-md-2">
+                        <label>Status</label>
                         <div class="form-group">
-                            <input id="inputSenha" type="text" class="form-control">
+                            <select id="inputStatus" type="text" class="form-control"></select>
                         </div>
-                    </div>
+                    </div> 
+
+                    <div class="col-md-1">                   
+                        <div class="form-group">
+                             <button id="btnPesquisar" class="btn btn-success">Pesquisar</button>
+                        </div>
+                    </div> 
+
+                    <div class="col-md-1">                   
+                        <div class="form-group">
+                             <button id="btnCancelar" class="btn ">Cancelar</button>
+                        </div>
+                    </div> 
                 </div>
             </div>
-        </div> -->
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-12 ml-auto mr-auto">
                 <!--Main tabs-->
                 <div class="card-body card">
                     <!--Tab Content-->
                     <div class="tab-content">
-                        <table id="datatable_usuarios"
+                        <table id="datatable_ordemProducaoOverview"
                             class="table table-hover table-striped table-bordered text-center" cellspacing="0"
                             width="100%">
                             <thead>
                                 <tr>
-                                    <th>Ordem Produção</th>
-                                    <th>Data Prevista</th>
-                                    <th>Quantidade</th>
-                                    <th>Receita</th>
+                                    <th width="15%">Ordem Produção</th>                                  
+                                    <th width="30%">Receita</th>
+                                    <th width="10%">Quantidade</th>
+                                    <th width="10%">Data Criação</th>
+                                    <th width="10%">Data Prevista</th>                                    
+                                    <th width="10%">Status OP</th>
+                                    <th width="10%">Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr style="height: 25px;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <tr style="height: 15px;">
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                    <td>a</td>
+                                </tr>                              
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Ordem Produção</th>
-                                    <th>Data Prevista</th>
-                                    <th>Quantidade</th>
                                     <th>Receita</th>
+                                    <th>Nº de Batches</th>
+                                    <th>Data Criação</th>
+                                    <th>Data Prevista</th>                                    
+                                    <th>Status OP</th>
+                                    <th>Ação</th>
+                                    
                                 </tr>
                             </tfoot>
                         </table>

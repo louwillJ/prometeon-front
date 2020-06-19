@@ -20,6 +20,7 @@
   <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="./assets/css/now-ui-dashboard.css?v=1.4.1" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/commom.css">
+  <link rel="stylesheet" href="./assets/css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="./assets/css/bootstrap-duallistbox.css">
 </head>
 
@@ -59,6 +60,7 @@
             </a>
           </div>
         </div> -->
+
         <ul class="nav">
           <li>
             <a data-toggle="collapse" data-target="#Cadastros" href="">
@@ -141,15 +143,16 @@
                   </a>
                   <div class="collapse" id="receitas">
                     <ul class="nav">
-                      <li ng-class="{ active: isActive('/Cadastros/Receitas/Overview')}">
-                        <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/Receitas/Overview">
+                      <li ng-class="{ active: isActive('/Cadastros/Receitas/HistoricoRevisao')}">
+                        <a style="padding: 11px 0 8px 12px;" href="#/Cadastros/Receitas/HistoricoRevisao">
                           <i class="now-ui-icons business_chart-bar-32"></i>
-                          <span class="sidebar-normal">Overview</span>
+                          <span class="sidebar-normal">Histórico - Revisão</span>
                         </a>
                       </li>
                     </ul>
                   </div>
                 </li>
+
               </ul>
             </div>
           </li>
@@ -215,7 +218,7 @@
   <script src="views/Cadastros/OrdemProducao/ordemProducao.js"></script>
   <script src="views/Cadastros/OrdemProducao/ordemProducaoOverview.js"></script>
   <script src="views/Cadastros/Receitas/receitas.js"></script>
-  <script src="views/Cadastros/Receitas/receitasOverview.js"></script>
+  <script src="views/Cadastros/Receitas/receitasHistoricoRevisao.js"></script>
 
   <!-- Plugins -->
   <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
