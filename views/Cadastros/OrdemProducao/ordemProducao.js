@@ -57,7 +57,18 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
                     // }
                 },
             ],
-            columnDefs: [{
+            columnDefs: [
+                {
+                    targets: 2,
+                    render: function (d, t, data) {
+                    if (data.receita == null) {
+                        return data.data
+                    } else {
+                        return data.receita.c_ESPEC + "-" + data.receita.maT_SAP_CODE 
+                    }
+                    }
+                },
+                {
                     targets: 5,
                     render: function (data) {
                         return moment(data).format('DD/MM/YYYY hh:mm');
@@ -96,10 +107,7 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
                     data: 'orG_ID'
                 },
                 {
-                    "data": 'iD_RECEITA',
-                    "render": function (d, t, data) {
-                        return data.receita.c_ESPEC + " - " + data.receita.maT_SAP_CODE;
-                    }
+                    data: 'receita.c_ESPEC'
                 },
                 {
                     data: 'material.maT_DESC'
@@ -134,6 +142,7 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
         });
     };
 
+
     $('#datatable_ordemProducao tbody').on('click', 'tr', function () {
         var data = $scope.table.row(this).data();
 
@@ -151,13 +160,13 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
         //iguala o texto da linha selecionada à formatação contida no text do select
         var receitaText = data.receita.c_ESPEC + "-" + data.receita.maT_SAP_CODE + " - " + data.material.maT_DESC;
 
-        $('#selectIdReceita option:selected').removeAttr('selected');
+        //$("#selectIdReceita").find('option:selected').removeAttr("selected");
+        $("#selectIdReceita").find('option').removeAttr("selected");
 
-        var opt = $('#selectIdReceita option').filter(function (el) {
+         $("#selectIdReceita option").filter(function() {
             return $(this).text() == receitaText;
-        });
+        }).attr('selected', true);
 
-        opt.attr('selected', true);
         //---------------------------------------------------------------------
 
 
@@ -190,7 +199,8 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
         $("#inputDtPrevista").val("");
         $("#inputStatus").val("");
         $("#inputDtCriacao").val("");
-        $('#selectIdReceita option:selected').removeAttr('selected');
+        $("#selectIdReceita").find('option:selected').removeAttr("selected");
+        $("#selectIdReceita").find('option').removeAttr("selected");
         $("#selectIdReceita").val("");
         $("#inputCespec").val("");
         $("#inputSapMatCode").val("");
@@ -204,65 +214,93 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
             //$("#inputStatus").prop('disabled',true);
 
             if ($('#selectIdReceita option:selected').val() != "") {
+              
+                if ($("#inputQtd").val() != "") {
 
-                Swal.fire({
-                    title: `Cadastrar Ordem de Produção?`,
-                    // text: `Esta operação não poderá ser desfeita!`,
-                    type: 'warning',
-                    showCancelButton: true,
-                    reverseButtons: true,
-                    allowOutsideClick: false,
-                    confirmButtonText: 'Confirmar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.value) {
+                    if ($("#inputDtPrevista").val() != "") {
 
-                        var dataPrevista = moment($("#inputDtPrevista").val(), "DD/MM/YYYY");
+                        Swal.fire({
+                            title: `Cadastrar Ordem de Produção?`,
+                            // text: `Esta operação não poderá ser desfeita!`,
+                            type: 'warning',
+                            showCancelButton: true,
+                            reverseButtons: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'Confirmar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.value) {
 
-                        //Feito isso basta definir o formato de saída:
-                        console.log(dataPrevista.format("YYYY-MM-DDT00:00:00"));
-                        console.log(dataPrevista.format("YYYY-MM-DD") + " oi: " + $("#inputDtPrevista").val());
+                                var dataPrevista = moment($("#inputDtPrevista").val(), "DD/MM/YYYY");
 
-                        var data = {
-                            orD_DATE_CREATION: moment().format(), //nasce com a data atual
-                            orD_QUANTITY: parseInt($("#inputQtd").val()),
-                            stA_ID: 1, // Nasce como Criada //parseInt($("#inputStatus").val()),
-                            orG_ID: parseInt($("#inputCentro").val()),
-                            orD_DATE_PLANNED: dataPrevista, //$("#inputDtPrevista").val(),
-                            iD_RECEITA: parseInt($('#selectIdReceita option:selected').val()),
-                            maT_SAP_CODE: $("#inputSapMatCode").val(),
-                            c_ESPEC: $("#inputCespec").val(),
-                            orD_ACTIVE: true
-                        };
+                                //Feito isso basta definir o formato de saída:
+                                console.log(dataPrevista.format("YYYY-MM-DDT00:00:00"));
+                                console.log(dataPrevista.format("YYYY-MM-DD") + " oi: " + $("#inputDtPrevista").val());
 
-                        $http({
-                            url: Url.ordemProducao.def,
-                            method: 'POST',
-                            data: JSON.stringify(data),
-                            processData: false
-                        }).then(function successCallback() {
-                            Swal.fire({
-                                title: 'Ordem de Produção Cadastrada!',
-                                type: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(function () {
-                                $("#btnCancelar").click();
-                                // $route.reload();
-                            });
-                        }, function errorCallback() {
-                            Swal.fire({
-                                title: 'Refaça operação',
-                                type: 'error',
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
+                                var data = {
+                                    orD_DATE_CREATION: moment().format(), //nasce com a data atual
+                                    orD_QUANTITY: parseInt($("#inputQtd").val()),
+                                    stA_ID: 1, // Nasce como Criada //parseInt($("#inputStatus").val()),
+                                    orG_ID: parseInt($("#inputCentro").val()),
+                                    orD_DATE_PLANNED: dataPrevista, //$("#inputDtPrevista").val(),
+                                    iD_RECEITA: parseInt($('#selectIdReceita option:selected').val()),
+                                    maT_SAP_CODE: $("#inputSapMatCode").val(),
+                                    c_ESPEC: $("#inputCespec").val(),
+                                    orD_ACTIVE: true
+                                };
+
+                                $http({
+                                    url: Url.ordemProducao.def,
+                                    method: 'POST',
+                                    data: JSON.stringify(data),
+                                    processData: false
+                                }).then(function successCallback() {
+                                    Swal.fire({
+                                        title: 'Ordem de Produção Cadastrada!',
+                                        type: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    }).then(function () {
+                                        //$("#btnCancelar").click();                                        
+                                        //$scope.getOPs();
+                                        $route.reload();
+                                    });
+                                }, function errorCallback() {
+                                    Swal.fire({
+                                        title: 'Refaça operação',
+                                        type: 'error',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                });
+
+                            } else {
+                                // $("#btnCancelar").click();
+                            };
                         });
-
+                    
                     } else {
+                        Swal.fire({
+                            title: 'Favor preencher a Data Prevista para Produção.',
+                            type: 'info',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(function () {
+                            // $("#btnCancelar").click();
+                            $("#inputDtPrevista").focus();
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'É necessário informar a quantidade.',
+                        type: 'info',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(function () {
                         // $("#btnCancelar").click();
-                    };
-                });
+                        $("#inputQtd").focus();
+                    });
+                }
 
             } else {
                 Swal.fire({
@@ -322,8 +360,9 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
                                 showConfirmButton: false,
                                 timer: 2000
                             }).then(function () {
-                                $("#btnCancelar").click();
-                                // $route.reload();
+                                //$("#btnCancelar").click();
+                                //$scope.getOPs();
+                                $route.reload();
                             });
                         }, function errorCallback() {
                             Swal.fire({
@@ -388,6 +427,8 @@ app.controller('ordemProducao', ['$scope', '$route', '$http', function ($scope, 
                         timer: 2000
                     }).then(function () {
                         $("#btnCancelar").click();
+                        $scope.getOPs();
+
                         // $route.reload();
                     });
                 }, function errorCallback() {

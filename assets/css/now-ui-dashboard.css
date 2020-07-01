@@ -504,6 +504,73 @@ fieldset[disabled] .btn-warning.active {
   box-shadow: none;
 }
 
+.btn-prometeon {
+  background-color: #1a2c5e;
+  color: #FFFFFF;
+}
+
+.btn-prometeon:hover,
+.btn-prometeon:focus,
+.btn-prometeon:not(:disabled):not(.disabled):active,
+.btn-prometeon:not(:disabled):not(.disabled).active,
+.btn-prometeon:not(:disabled):not(.disabled):active:focus,
+.btn-prometeon:not(:disabled):not(.disabled).active:focus,
+.btn-prometeon:active:hover,
+.btn-prometeon.active:hover,
+.show>.btn-prometeon.dropdown-toggle,
+.show>.btn-prometeon.dropdown-toggle:focus,
+.show>.btn-prometeon.dropdown-toggle:hover {
+  background-color: #1d3169;
+  color: #FFFFFF;
+  box-shadow: none;
+  border-color: #1d3169;
+}
+
+.btn-prometeon:not([data-action]):not([class*="btn-outline-"]):hover {
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.17);
+}
+
+.btn-prometeon.disabled,
+.btn-prometeon.disabled:hover,
+.btn-prometeon.disabled:focus,
+.btn-prometeon.disabled.focus,
+.btn-prometeon.disabled:active,
+.btn-prometeon.disabled.active,
+.btn-prometeon:disabled,
+.btn-prometeon:disabled:hover,
+.btn-prometeon:disabled:focus,
+.btn-prometeon:disabled.focus,
+.btn-prometeon:disabled:active,
+.btn-prometeon:disabled.active,
+.btn-prometeon[disabled],
+.btn-prometeon[disabled]:hover,
+.btn-prometeon[disabled]:focus,
+.btn-prometeon[disabled].focus,
+.btn-prometeon[disabled]:active,
+.btn-prometeon[disabled].active,
+fieldset[disabled] .btn-prometeon,
+fieldset[disabled] .btn-prometeon:hover,
+fieldset[disabled] .btn-prometeon:focus,
+fieldset[disabled] .btn-prometeon.focus,
+fieldset[disabled] .btn-prometeon:active,
+fieldset[disabled] .btn-prometeon.active {
+  background-color: #1a2c5e;
+  border-color: #1a2c5e;
+}
+
+.btn-prometeon.btn-link {
+  color: #1a2c5e;
+}
+
+.btn-prometeon.btn-link:hover,
+.btn-prometeon.btn-link:focus,
+.btn-prometeon.btn-link:active {
+  background-color: transparent;
+  color: #1d3169;
+  text-decoration: none;
+  box-shadow: none;
+}
+
 .btn-danger {
   background-color: #FF3636;
   color: #FFFFFF;

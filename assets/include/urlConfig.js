@@ -2,13 +2,15 @@ var dev = 'http://localhost:4000';
 var prod = '';
 
 var ambiente = dev;
+
 var Url = {
   'usuarios': {
     'def': `${ambiente}/api/usuarios`,
+    'login': `${ambiente}/api/usuarios/authenticate`,
     'logout': `${ambiente}/api/usuarios/revoke-token`
   },
   'acesso': {
-    'def': `${ambiente}/api/nivelManagement`,
+    'man': `${ambiente}/api/nivelManagement`,
     'grupo': `${ambiente}/api/nivelAcesso`,
     'screen': `${ambiente}/api/screen`
   },
@@ -26,37 +28,19 @@ var Url = {
     'processo': `${ambiente}/api/op_processo`,
     'status': `${ambiente}/api/op_status`
   },
-  // 'ordemStatus': {
-  //   'def': `${ambiente}/api/op_status`,
-  // },
-  // 'ordemProducaoOverview': {
-  //   'def': `${ambiente}/api/op_overview`,
-  // },
-  // 'ordemProducaoOverviewBusca': {
-  //   'def': `${ambiente}/api/op_overview/`,
-  // },
-  // 'op_processo': {
-  //   'def': `${ambiente}/api/op_processo/`,
-  // },
   'receita': {
     'mp': `${ambiente}/api/receita_mp/`,
     'operacao': `${ambiente}/api/receita_operacao/`,
-    'overview': `${ambiente}/api/receita_overview/`,
+    'overview': {
+      'def': `${ambiente}/api/receita_overview/`,
+      'mp': `${ambiente}/api/receita_overview/mp/`,
+      'operacao': `${ambiente}/api/receita_overview/operacao/`,
+      'processo': `${ambiente}/api/receita_overview/processo/`
+    },
     'processo': `${ambiente}/api/receita_processo/`
   },
-  // 'receitaOverview': {
-  //   'def': `${ambiente}/api/receita_overview/`,
-  // },
-  // 'receitaMP': {
-  //   'def': `${ambiente}/api/receita_mp/`,
-  // },
-  // 'receitaOperacao': {
-  //   'def': `${ambiente}/api/receita_operacao/`,
-  // },
-  // 'receitaProcesso': {
-  //   'def': `${ambiente}/api/receita_processo/`,
-  // },
   'material': {
     'def': `${ambiente}/api/material/`,
+    'tipo': `${ambiente}/api/tipoMaterial`
   }
 };

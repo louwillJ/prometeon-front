@@ -3,8 +3,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
 
     $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
-
-        $scope.getReceita();
+        getReceita();
 
         $scope.tableR = $('#datatable_receita').DataTable({
             "jQueryUI": true,
@@ -52,12 +51,14 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
             var data = $scope.tableMP.row(this).data();
 
             $("#Cadastro_Materiais").show();
-
+            
+            $("#inputMPLMSeq").val(data.lmM_SEQUENCE);
             $("#inputMPId").val(data.mppaR_ID);
             $("#inputMPCespec").val(data.c_ESPEC);
             $("#inputMPMtCode").val(data.maT_SAP_CODE);
             $("#inputMPIdRec").val(data.iD_RECEITA);
-            $("#inputMPChildMat").val(data.chilD_MAT_SAP_CODE);
+            $("#inputMPChildMat").val(data.chilD_MAT_SAP_CODE);            
+            $("#inputMPDesc").val(data.material.maT_DESC);//NOVO
             $("#inputPeso").val(data.boM_QUANTITY);
             $("#inputTolMax").val(data.mppaR_TOLMAX);
             $("#inputTolMin").val(data.mppaR_TOLMIN);
@@ -68,6 +69,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
             $("#inputPesJog").val(data.mppaR_PESOJOG);
             $("#inputTemJog").val(data.mppaR_TEMPOJOG);
             $("#inputSilTan").val(data.mppaR_SILOTANQUE);
+            
 
             //$("#btnExcluir").css("display", "block");
             //$("#btnTurno").removeClass("btn-success").addClass("btn-warning").text("Editar");
@@ -77,7 +79,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
     });
 
     $('#datatable_op tbody').on('click', 'tr', function () {
-        var data = tableOP.row(this).data();
+        var data = $scope.tableOP.row(this).data();
         console.log("passou na operacao:");
 
         if (!$("#fieldOper").attr("disabled")) { //se o fieldSet estiver Habilitado
@@ -118,6 +120,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
         $("#inputMPMtCode").val("");
         $("#inputMPIdRec").val("");
         $("#inputMPChildMat").val("");
+        $("#inputMPDesc").val("");//NOVO
         $("#inputPeso").val("");
         $("#inputTolMax").val("");
         $("#inputTolMin").val("");
@@ -173,8 +176,8 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
         var idProcesso = $("#inputProcId").val();
 
         //RECARREGA CAMPOS DE PROCESSO SEM SALVAR
-        $.getJSON(Url.receita.processo + `${idProcesso}`, function (data) {
-            $.each(data, function (key, val) {
+        $http(Url.receita.overview.processo + `${idProcesso}`).then(function (response) {
+            $.each(response.data, function (key, val) {                
 
                 $("#inputProcId").val(val.rproC_ID);
                 $("#inputProcIdRec").val(val.iD_RECEITA);
@@ -227,11 +230,11 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                     var idReceitaAtual = $('#selectIdReceita option:selected').val();
 
                     $http({
-                        url: Url.receita.overview + `?idReceita=${idReceitaAtual}&operacao=INSERT`,
+                        url: Url.receita.overview.def + `?idReceita=${idReceitaAtual}&operacao=INSERT`,
                         method: 'POST',
                         processData: false
-                    }).then(function successCallback(data) {
-                        if (!data) {
+                    }).then(function successCallback(response) {
+                        if (!response.data) {
 
                             Swal.fire({
                                 title: 'Ocorreu um erro!',
@@ -244,16 +247,16 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
 
                         } else {
 
-                            if (data[0].tipO_RETORNO == 'S') {
+                            if (response.data[0].tipO_RETORNO == 'S') {
                                 Swal.fire({
-                                    title: data[0].retorno,
+                                    title: response.data[0].retorno,
                                     type: 'success',
                                     showConfirmButton: false,
                                     timer: 2000
                                 }).then(function () {
                                     $('#btnGerarNovaReceita').css("display", "none");
                                     //atribui o id da nova receita gerado, e recarrega toda a tela com o novo id da receita
-                                    consulta = data[0].novO_ID;
+                                    consulta = response.data[0].novO_ID;
                                     $('#selectIdReceita').change();
                                     $("#btnGerarNovaReceita").removeClass("btn-success").addClass("btn-danger").text("Excluir versão em andamento");
                                     $("#btnCancelarPesquisa").css("display", "none");
@@ -265,7 +268,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                             } else {
 
                                 Swal.fire({
-                                    title: data[0].retorno,
+                                    title: response.data[0].retorno,
                                     type: 'error',
                                     showConfirmButton: false,
                                     timer: 2000
@@ -303,11 +306,11 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                     var idReceitaAtual = consulta;
 
                     $http({
-                        url: Url.receita.overview + `?idReceita=${idReceitaAtual}&operacao=DELETE`,
+                        url: Url.receita.overview.def + `?idReceita=${idReceitaAtual}&operacao=DELETE`,
                         method: 'POST',
                         processData: false
-                    }).then(function successCallback(data) {
-                        if (!data) {
+                    }).then(function successCallback(response) {
+                        if (!response.data) {
 
                             Swal.fire({
                                 title: 'Ocorreu um erro!',
@@ -320,9 +323,9 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
 
                         } else {
 
-                            if (data[0].tipO_RETORNO == 'S') {
+                            if (response.data[0].tipO_RETORNO == 'S') {
                                 Swal.fire({
-                                    title: data[0].retorno,
+                                    title: response.data[0].retorno,
                                     type: 'success',
                                     showConfirmButton: false,
                                     timer: 2000
@@ -333,7 +336,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                             } else {
 
                                 Swal.fire({
-                                    title: data[0].retorno,
+                                    title: response.data[0].retorno,
                                     type: 'error',
                                     showConfirmButton: false,
                                     timer: 2000
@@ -392,23 +395,25 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
             }).then((result) => {
                 if (result.value) {
 
+                    
                     var idMP = $("#inputMPId").val();
                     console.log(idMP);
                     var data = {
-
+                        
+                        lmM_SEQUENCE: parseInt($("#inputMPLMSeq").val()),
                         mppaR_ID: parseInt($("#inputMPId").val()),
                         c_ESPEC: $("#inputMPCespec").val(),
                         maT_SAP_CODE: $("#inputMPMtCode").val(),
                         iD_RECEITA: parseInt($("#inputMPIdRec").val()),
                         chilD_MAT_SAP_CODE: $("#inputMPChildMat").val(),
                         boM_QUANTITY: parseFloat($("#inputPeso").val().replace(",", ".")),
-                        mppaR_TOLMIN: parseInt($("#inputTolMin").val()),
-                        mppaR_TOLMAX: parseInt($("#inputTolMax").val()),
+                        mppaR_TOLMIN: parseFloat($("#inputTolMin").val().replace(",", ".")),
+                        mppaR_TOLMAX: parseFloat($("#inputTolMax").val().replace(",", ".")),
                         mppaR_VELRAP: parseInt($("#inputVelRap").val()),
                         mppaR_VELLEN: parseInt($("#inputVelLen").val()),
                         mppaR_VELJOG: parseInt($("#inputVelJog").val()),
-                        mppaR_PESOLEN: parseInt($("#inputPesLen").val()),
-                        mppaR_PESOJOG: parseInt($("#inputPesJog").val()),
+                        mppaR_PESOLEN: parseFloat($("#inputPesLen").val().replace(",", ".")),
+                        mppaR_PESOJOG: parseFloat($("#inputPesJog").val().replace(",", ".")),
                         mppaR_TEMPOJOG: parseInt($("#inputTemJog").val()),
                         mppaR_SILOTANQUE: parseInt($("#inputSilTan").val())
 
@@ -426,8 +431,9 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                             showConfirmButton: false,
                             timer: 2000
                         }).then(function () {
+                            var id = $("#inputMPIdRec").val();
+                            $scope.getTableMP(id);
                             $("#btnCancelarMP").click();
-                            // $scope.tableMP.ajax.reload();
                             $("#Cadastro_Materiais").css("display", "none");
                         });
                     }, function errorCallback() {
@@ -478,8 +484,8 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                         maT_SAP_CODE: $("#inputOperMatCod").val(),
                         iD_RECEITA: parseInt($("#inputOperIdRec").val()),
                         opeR_SEQ: parseInt($("#inputOperSeq").val()),
-                        opeR_COD: parseInt($("#inputCodOper").val()),
-                        opeR_DESC: parseInt($("#inputDescOper").val()),
+                        opeR_COD: $("#inputCodOper").val(),
+                        opeR_DESC: $("#inputDescOper").val(),
                         rproC_TEMPO: parseInt($("#inputTempoOp").val()),
                         rproC_ENERGIA: parseInt($("#inputEnergia").val()),
                         rproC_RPM: parseFloat($("#inputRPM").val().replace(",", ".")),
@@ -488,7 +494,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
 
                     };
                     $http({
-                        url: Url.receita.operacao + `${idOper}`,
+                        url: Url.receita.overview.operacao + `${idOper}`,
                         method: 'PUT',
                         data: JSON.stringify(data),
                         processData: false
@@ -498,9 +504,11 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                             type: 'success',
                             showConfirmButton: false,
                             timer: 2000
-                        }).then(function () {
-                            $("#btnCancelarOperacao").click();
+                        }).then(function () {                            
                             // tableOP.ajax.reload();
+                            var id = $("#inputOperIdRec").val();
+                            $scope.getTableOP(id);
+                            $("#btnCancelarOperacao").click();
                             $("#Cadastro_Operacao").css("display", "none");
                         });
                     }, function errorCallback() {
@@ -568,13 +576,13 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                         rproC_TEMPMIXER3: parseFloat($("#inputTempMix3").val().replace(",", ".")),
                         rproC_TEMPSEGURANCA: parseFloat($("#inputTempSegur").val().replace(",", ".")),
                         rproC_PRESSAOSONDA: parseFloat($("#inputPresSonda").val().replace(",", ".")),
-                        rproC_VELOCROTOR: parseFloat($("#inputVelRotor").val()),
+                        rproC_VELOCROTOR: parseFloat($("#inputVelRotor").val().replace(",", ".")),
                         rproC_NOTAS: $("#inputNota").val()
 
                     };
 
                     $http({
-                        url: Url.receita.processo + `${idProc}`,
+                        url: Url.receita.overview.processo + `${idProc}`,
                         method: 'PUT',
                         data: JSON.stringify(data),
                         processData: false
@@ -677,7 +685,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
         // $("#fieldMP").prop("disabled", false);
 
 
-        carregaReceita(valueSelected);
+        $scope.carregaReceita(valueSelected);
 
     });
 
@@ -685,8 +693,8 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
     $scope.carregaReceita = (id) => {
 
         //CARREGA CAMPOS PAI DA RECEITA
-        $http.get(Url.receita.overview + `${id}`).then(function (data) {
-            $.each(data, function (key, val) {
+        $http.get(Url.receita.overview.def + `${id}`).then(function (response) {
+            $.each(response.data, function (key, val) {
 
                 $("#inputProduto").val(val.material.maT_DESC);
                 $("#inputEquip").val(val.mT_CODE);
@@ -697,8 +705,8 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
         });
 
         //CARREGA CAMPOS DE PROCESSO
-        $http.get(Url.receita.overview + `Processo/${id}`).then(function (data) {
-            $.each(data, function (key, val) {
+        $http.get(Url.receita.overview.processo + `${id}`).then(function (response) {
+            $.each(response.data, function (key, val) {
 
                 $("#inputProcId").val(val.rproC_ID);
                 $("#inputProcIdRec").val(val.iD_RECEITA);
@@ -760,7 +768,12 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                 enable: false
             },
             columns: [{
+                    data: 'lmM_SEQUENCE'
+                },{
                     data: 'chilD_MAT_SAP_CODE'
+                },
+                {
+                    data: 'material.maT_DESC'
                 },
                 {
                     data: 'boM_QUANTITY'
@@ -795,7 +808,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
             ],
         });
 
-        $scope.getTableMP();
+        $scope.getTableMP(id);
 
         //CARREGA DATA TABLE DE OPERAÇÕES:
         if ($.fn.dataTable.isDataTable('#datatable_op')) {
@@ -842,7 +855,7 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
                     data: 'opeR_SEQ'
                 },
                 {
-                    data: 'opeR_DESC'
+                    data:  'opeR_DESC'
                 },
                 {
                     data: 'rproC_TEMPO'
@@ -862,22 +875,22 @@ app.controller('receitas', ['$scope', '$route', '$http', function ($scope, $rout
             ]
         });
 
-        $scope.getTableOP();
+        $scope.getTableOP(id);
     };
 
-    $scope.getTableMP = () => {
-        $http.get(Url.receita.overview + `MP/${id}`).then(function successCallback(response) {
-            $scope.table.clear().draw();
-            $scope.table.rows.add(response.data).draw();
+    $scope.getTableMP = (id) => {
+        $http.get(Url.receita.overview.mp + `${id}`).then(function successCallback(response) {
+            $scope.tableMP.clear().draw();
+            $scope.tableMP.rows.add(response.data).draw();
         }, function errorCallback(response) {
             console.log(response)
         });
     };
 
-    $scope.getTableOP = () => {
-        $http.get(Url.receita.overview + `Operacao/${id}`).then(function successCallback(response) {
-            $scope.table.clear().draw();
-            $scope.table.rows.add(response.data).draw();
+    $scope.getTableOP = (id) => {
+        $http.get(Url.receita.overview.operacao + `${id}`).then(function successCallback(response) {
+            $scope.tableOP.clear().draw();
+            $scope.tableOP.rows.add(response.data).draw();
         }, function errorCallback(response) {
             console.log(response)
         });

@@ -8,13 +8,14 @@
         </div>
         <div class="col-sm-6">
             <div class="row card-body float-right" style="padding-bottom:16px">
-                <button type="button" title="Editar Nome do Grupo" class="btn btn-warning" style="padding-right: 19.03px;">
+                <button id="btnEditar" title="Editar Nome do Grupo" class="btn btn-warning"
+                    style="padding-right: 19.03px;">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button type="button" title="Excluir Grupo" class="btn btn-danger">
+                <button id="btnExcluir" type="button" title="Excluir Grupo" class="btn btn-danger">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                <button type="button" onclick="location.href = '#/Cadastros/GrupoAcesso';" class="btn ">
+                <button id="btnReturn" type="button" onclick="location.href = '#/Cadastros/GrupoAcesso';" class="btn ">
                     <span class="btn-label">
                         <i class="now-ui-icons arrows-1_minimal-left"></i>
                     </span>
@@ -66,7 +67,7 @@
                         <!-- <form id="telasForm" action="#" method="post"> -->
                         <select multiple="" size="10" name="duallistboxTelas" id="telaSistema" type="text"
                             style="display: none;">
-                            <option ng-repeat="tela in telas" value="{{tela.scR_ID}}">{{tela.scR_ROUTE}}</option>
+                            <option ng-repeat="tela in telas" value="{{tela.scR_ID}}">{{tela.scR_DESCRIPTION}}</option>
                         </select>
                         <!-- </form> -->
                     </div>

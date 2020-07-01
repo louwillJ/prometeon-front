@@ -68,13 +68,16 @@ app.controller('usuario', ['$scope', '$route', '$http', function ($scope, $route
                     data: 'userAccessLevel.leV_NAME'
                 }
             ],
-            // "columnDefs": [{
-            //         "targets": 0,
-            //         render: function (data, type, row) {
-            //             return moment(row.dtInicio).format('DD/MM/YYYY HH:mm');
-            //         }
-            //     }
-            // ],
+            "columnDefs": [{
+                "targets": 2,
+                render: function (data, type, row) {
+                    if (data !== undefined) {
+                        return data;
+                    } else {
+                        return "-";
+                    };
+                }
+            }],
         });
 
         $http({

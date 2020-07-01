@@ -89,77 +89,88 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="display:none">
-                                    <label class="ml-3">ID_RECEITA</label>
-                                    <div class="form-group ml-3" style="display:none">
+                                    <label class="ml-3" >ID_RECEITA</label>
+                                    <div class="form-group ml-3" >
                                         <input id="inputMPIdRec" type="text" class="form-control">
                                     </div>
                                 </div>
-
-                                
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-3">Matéria Prima</label>
+                                    <label class="ml-3">Sequência</label>
                                     <div class="form-group ml-3">
-                                        <input id="inputMPChildMat" type="text" class="form-control" disabled>
+                                        <input id="inputMPLMSeq" type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Peso</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Cód MP</label>
+                                    <div class="form-group ml-4">
+                                        <input id="inputMPChildMat" type="text" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3" style="padding: 0;">
+                                    <label class="ml-4">Matéria Prima</label>
+                                    <div class="form-group ml-4">
+                                        <input id="inputMPDesc" type="text" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2" style="padding: 0;">
+                                    <label class="ml-4">Peso</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputPeso" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-3">Toler Max.</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Toler Max.</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputTolMax" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Toler Min.</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Toler Min.</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputTolMin" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Vel. Rápida</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Vel. Rápida</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputVelRap" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Vel. Lenta</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Vel. Lenta</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputVelLen" type="text" class="form-control">
                                     </div>
                                 </div>
-                        
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Vel. Jog</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-3">Vel. Jog</label>
+                                    <div class="form-group ml-3">
                                         <input id="inputVelJog" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Peso Lento</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Peso Lento</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputPesLen" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Peso jog</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Peso jog</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputPesJog" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="padding: 0;">
-                                    <label class="ml-2">Tempo Jog</label>
-                                    <div class="form-group ml-2">
+                                    <label class="ml-4">Tempo Jog</label>
+                                    <div class="form-group ml-4">
                                         <input id="inputTemJog" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-sm-1.5" style="padding: 0;">
-                                    <label class="ml-2">Silo Tanque</label>
-                                    <div class="form-group ml-2 mr-3 pr-2">
+                                    <label class="ml-4">Silo Tanque</label>
+                                    <div class="form-group ml-4 mr-3 pr-2">
                                         <input id="inputSilTan" type="text" class="form-control">
                                     </div>
                                 </div>
@@ -182,7 +193,9 @@
                             cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>M.P.</th>
+                                    <th>Seq.</th>
+                                    <th>Cod.</th>
+                                    <th>Matéria Prima</th>
                                     <th>Peso Plan.</th>
                                     <th>Tol. Max.</th>
                                     <th>Tol. Min.</th>
@@ -197,6 +210,8 @@
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -244,7 +259,7 @@
                                         <input id="inputOperSeq" type="text" class="form-control" disabled>
                                     </div>
                                 </div>
-                                <div class="col-sm-1" style="padding: 0;">
+                                <div class="col-sm-1" style="padding: 0; display:none" >
                                     <label class="ml-2">IdOper</label>
                                     <div class="form-group ml-2">
                                         <input id="inputCodIdOper" type="text" class="form-control" disabled>
@@ -369,8 +384,6 @@
                                                 <input id="inputProcMatCod" type="text" class="form-control" disabled>
                                             </div>
                                         </div>
-
-
                                 
                                         <div class="col-sm-1.1" style="padding: 0;">
                                             <label class="ml-3">Temp. Mixer Z1</label>
@@ -411,14 +424,14 @@
                             </div>
 
                             <div class="row" >
-                                <div class="col-6" >
+                                <div class="col-8" style="padding: 0;">
                                     
                                         <label class="ml-3">Notas</label>
                                         <div class="form-group ml-3">
-                                            <input id="inputNota" type="text" class="form-control" disabled>
+                                            <input  id="inputNota" type="text" class="form-control" disabled>
                                         </div>
                                 </div>
-                                <div class="col-6 float-right" style="padding-bottom:5px; ">
+                                <div class="col-4 float-right" style="padding-bottom:5px; ">
                                     <button id="btnEditarProcesso" class="btn btn-success float-right mr-4" style="display: none">Editar</button>
                                     <button id="btnSalvarProcesso" class="btn btn-success float-right mr-4" style="display: none">Salvar</button>
                                     <button id="btnCancelarProcesso" class="btn btn-danger float-right  mr-4" style="display: none">Cancelar</button>

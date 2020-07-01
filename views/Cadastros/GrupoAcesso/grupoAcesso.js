@@ -1,4 +1,4 @@
-app.controller("grupoAcesso", function ($scope, $http, $route, $anchorScroll) {
+app.controller("grupoAcesso", ['$scope', '$http', '$route', function ($scope, $http, $route) {
     $scope.$on('$viewContentLoaded', function () {
         $('#Cadastros').addClass('show');
 
@@ -104,4 +104,4 @@ app.controller("grupoAcesso", function ($scope, $http, $route, $anchorScroll) {
             }
         });
     });
-}); // FIM CONTROLLER
+}]); // FIM CONTROLLER

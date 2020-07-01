@@ -1,4 +1,4 @@
-app.factory('myHttpInterceptor', function ($q) {
+app.factory('myHttpInterceptor', ['$q', function ($q) {
     return {
         // optional method
         request: function (config) {
@@ -17,7 +17,6 @@ app.factory('myHttpInterceptor', function ($q) {
                     showConfirmButton: false,
                     timer: 5000
                 }).then(function () {
-                    sessionStorage.removeItem("log");
                     window.location.href = "login.html";
                 });
             } else if (rejection.status === 403) {
@@ -26,7 +25,7 @@ app.factory('myHttpInterceptor', function ($q) {
                     type: 'error',
                     showConfirmButton: false,
                     timer: 2000
-                })
+                });
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -55,7 +54,7 @@ app.factory('myHttpInterceptor', function ($q) {
         //     return $q.reject(rejection);
         // }
     };
-});
+}]);
 
 app.config(['$httpProvider', Interceptor]);
 

@@ -57,6 +57,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="row justify-content-center">
             <div class="col-md-12 ml-auto mr-auto">
                 <!--Main tabs-->
@@ -69,11 +70,12 @@
                             <thead>
                                 <tr>
                                     <th width="20%">Código da Receita</th>
-                                    <th width="30%">Produto</th>
+                                    <th width="20%">Produto</th>
                                     <th width="10%">Equipamento</th>
                                     <th width="10%">Versão</th>
                                     <th width="10%">Data de Modificação</th>
-                                    <th width="10%">Status</th>
+                                    <th width="20%">Status</th>
+                                    <th width="20%">Ver Detalhes</th>
                                   
                                 </tr>
                             </thead>
@@ -84,7 +86,8 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                   
+                                    <td></td>
+                                    <td></td>                                   
                                 </tr>
                                 
                             </tbody>
@@ -96,6 +99,7 @@
                                     <th>Versão</th>
                                     <th>Data de Modificação</th>
                                     <th>Status</th>
+                                    <th>Ver Detalhes</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -105,6 +109,163 @@
                      
                     </div>
                 </div>
+
+
+
+<!--novidade familia-->
+
+<!-- Large modal -->
+<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Large modal</button>-->
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Detalhe da Receita</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+                <!------>
+                <div class="card-body card" id="Card_Tabela_Receita" style="display:block">
+                    <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                        <legend style="width: fit-content;padding: 0 5px;">Receita</legend>
+                    
+                            <table id="datatable_receita"
+                                class="table table-hover table-striped table-bordered text-center context-menu-one"
+                                cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">Cód Receita</th>
+                                        <th width="10%">Produto</th>
+                                        <th width="10%">Equipamento</th>
+                                        <th width="10%">Data Criação</th>
+                                        <th width="5%">Versão</th>
+                                        <th width="5%">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </fieldset>
+                                
+                    <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                        <legend style="width: fit-content;padding: 0 5px;">Matérias Primas</legend>
+                    
+                            <table id="datatable_mp"
+                                class="table table-hover table-striped table-bordered text-center context-menu-one"
+                                cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">M.P.</th>
+                                        <th width="5%">Peso Plan.</th>
+                                        <th width="5%">Tol. Max.</th>
+                                        <th width="5%">Tol. Min.</th>
+                                        <th width="5%">Vel. Rápida</th>
+                                        <th width="5%">Vel. Lenta</th>
+                                        <th width="5%">Vel. Jog.</th>
+                                        <th width="5%">Pes. Lento</th>
+                                        <th width="5%">Pes. Jog.</th>
+                                        <th width="5%">Temp. Jog.</th>
+                                        <th width="5%">Silo Tanque</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </fieldset>
+                            
+                    <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                        <legend style="width: fit-content;padding: 0 5px;">Operações </legend>
+                        <table id="datatable_op" class="table table-hover table-striped table-bordered text-center context-menu-one"
+                        cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="5%">Seq.</th>
+                                <th width="20%">Operação</th>
+                                <th width="5%">Tempo</th>
+                                <th width="5%">Energia</th>
+                                <th width="5%">RPM</th>
+                                <th width="5%">Temperatura</th>                            
+                                <th width="5%">Pressão pistão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        </table>
+                            
+                    </fieldset>
+                
+                    <fieldset style="border:1px solid darkgray;border-radius: 10px;padding: 0 0 0 7px;">
+                        <legend style="width: fit-content;padding: 0 5px;">Processo</legend>
+                    
+                            <table id="datatable_Processo"
+                                class="table table-hover table-striped table-bordered text-center context-menu-one"
+                                cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">Temp Mixer Z1</th>
+                                        <th width="5%">Temp Mixer Z2</th>
+                                        <th width="5%">Temp Mixer Z3</th>
+                                        <th width="5%">Temp Segurança</th>
+                                        <th width="5%">Pressão Inicial Sonda</th>
+                                        <th width="5%">Velocidade Inicial Rotor</th>
+                                        <th width="20%">Notas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </fieldset>            
+                </div>
+                <!------>
+        </div>
+    </div>
+  </div>
+</div>
+
+                
             </div>
         </div>
     </div>

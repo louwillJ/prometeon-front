@@ -42,7 +42,7 @@
                     <div class="col-md-2">
                         <label>Quantidade</label>
                         <div class="form-group">
-                            <input id="inputQtd" type="text" class="form-control">
+                            <input id="inputQtd" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control">
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-app.controller('plantModel', ['$scope', '$http', function ($scope, $http) {
+app.controller('plantModel', ['$scope', '$http', '$route', function ($scope, $http, $route) {
     var _idPlant = '';
 
     $scope.$on('$viewContentLoaded', function () {

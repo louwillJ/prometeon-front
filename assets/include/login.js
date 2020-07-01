@@ -20,7 +20,7 @@ if (sessionStorage.getItem("log") == "in") {
             };
 
             $.ajax({
-                    "url": "http://localhost:4000/api/usuarios/authenticate",
+                    "url": Url.usuarios.login,
                     "method": "POST",
                     "data": JSON.stringify(data),
                     "headers": {
@@ -30,12 +30,14 @@ if (sessionStorage.getItem("log") == "in") {
                     sessionStorage.removeItem("FailCounter");
 
                     $("#loader").hide();
-                    $("#errMsg").text('').hide()
+                    $("#errMsg").text('').hide();
                     // . usR_ID,usR_NAME,usR_SETOR,usR_ACCESS_LEVEL,usR_ACTIVE,jwtToken
                     sessionStorage.setItem("log", "in");
+                    sessionStorage.setItem("id", response.usR_ID);
                     sessionStorage.setItem("token", response.jwtToken);
                     sessionStorage.setItem("access", response.usR_ACCESS_LEVEL);
-                    window.location.href = "/";
+
+                    getTelasPermitidas(response.usR_ACCESS_LEVEL, response.jwtToken);
                 })
                 .fail(function (err, textStatus, xhr) {
                     $("#loader").hide();
@@ -58,6 +60,29 @@ if (sessionStorage.getItem("log") == "in") {
                 });
         };
     });
+
+    function getTelasPermitidas(levelId, token) {
+        $.ajax({
+            "url": Url.acesso.man,
+            "method": "GET",
+            "headers": {
+                'Content-Type': `application/json`,
+                'Authorization': `Bearer ${token}`
+            }
+        }).done(function (response) {
+            var objTelas = [];
+
+            objTelas.push(0);
+            response.forEach(element => {
+                if (element.leV_ID == levelId) {
+                    objTelas.push(element.scR_ID);
+                };
+            });
+            sessionStorage.setItem("screen", objTelas);
+
+            window.location.href = "/";
+        });
+    };
 
     $("#username").change(() => {
         $("#errUserMsg").hide();

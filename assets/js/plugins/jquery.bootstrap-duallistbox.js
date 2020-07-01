@@ -45,7 +45,7 @@
       eventMoveAllOverride: false, // boolean, allows user to unbind default event behaviour and run their own instead
       eventRemoveOverride: false, // boolean, allows user to unbind default event behaviour and run their own instead
       eventRemoveAllOverride: false, // boolean, allows user to unbind default event behaviour and run their own instead
-      btnClass: 'btn btn-spi', // sets the button style class for all the buttons
+      btnClass: 'btn btn-prometeon', // sets the button style class for all the buttons
       btnMoveText: '<i class="fas fa-angle-right"></i>', // string, sets the text for the "Move" button
       btnRemoveText: '<i class="fas fa-angle-left"></i>', // string, sets the text for the "Remove" button
       btnMoveAllText: '<i class="fas fa-angle-double-right"></i>', // string, sets the text for the "Move All" button
